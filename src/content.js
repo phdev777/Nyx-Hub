@@ -35,7 +35,7 @@ export const demoPanel = {
   footer: 'Tudo num painel só, em vez de planilha e WhatsApp.',
 }
 
-// Faixa abaixo do hero: o que fazemos, em linguagem simples (decidido em 31/10).
+// Pílulas abaixo do hero: o que fazemos, só os nomes, em linguagem simples (decidido em 31/10).
 export const stack = ['Automações', 'Integração com ERP', 'Agentes de IA']
 
 export const problem = {

@@ -49,25 +49,6 @@
   [style*="transform"]:not([data-bar]) { transform: none !important; }
 }
 
-/* Faixa de tecnologias: anima em CSS (fora da thread principal) e pausa no hover/foco. */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.marquee-track {
-  animation: marquee 38s linear infinite;
-}
-.marquee:focus-within .marquee-track,
-.marquee[data-paused="true"] .marquee-track {
-  animation-play-state: paused;
-}
-@media (hover: hover) and (pointer: fine) {
-  .marquee:hover .marquee-track { animation-play-state: paused; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; }
-}
-
 /* Brilho azul do gradiente da marca. */
 .glow-bottom {
   background:

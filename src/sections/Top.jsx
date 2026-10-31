@@ -207,26 +207,20 @@ function DemoPanel() {
   )
 }
 
+// Abaixo do hero: o que fazemos, só os nomes, em pílulas fixas (sem faixa rolando).
 export function StackStrip() {
-  const [paused, setPaused] = useState(false)
-  // Poucos itens: repete o bastante para a faixa nunca ficar vazia em tela larga. Duas metades iguais para o -50% fechar o ciclo.
-  const half = Array.from({ length: 4 }, () => stack).flat()
-  const items = [...half, ...half]
   return (
-    <section aria-label="O que fazemos" className="border-y border-alice/10 bg-prussian/30">
-      <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <p className="hidden shrink-0 py-5 text-xs uppercase tracking-[0.16em] text-alice/60 sm:block">Pra sua empresa</p>
-        <div className="marquee relative flex-1 overflow-hidden py-5 [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]" data-paused={paused}>
-          {/* Espaço em cada item (não gap na lista): assim -50% cai exatamente no começo da segunda cópia. */}
-          <ul className="marquee-track flex w-max">
-            {items.map((item, i) => (
-              <li key={`${item}-${i}`} aria-hidden={i >= stack.length} className="whitespace-nowrap pr-10 text-sm font-medium text-alice/60">{item}</li>
-            ))}
-          </ul>
-        </div>
-        <button type="button" onClick={() => setPaused((p) => !p)} className="inline-flex min-h-11 shrink-0 items-center rounded-full px-3 text-xs text-alice/60 hover:text-alice/90">
-          {paused ? 'Continuar' : 'Pausar'}<span className="sr-only"> faixa</span>
-        </button>
+    <section aria-labelledby="o-que-fazemos" className="border-y border-alice/10 bg-prussian/30 px-4 py-8 sm:px-6">
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+        <h2 id="o-que-fazemos" className="shrink-0 text-xs font-semibold uppercase tracking-[0.16em] text-nyx-light">O que fazemos</h2>
+        <ul className="flex flex-wrap gap-3">
+          {stack.map((item) => (
+            <li key={item} className="inline-flex min-h-11 items-center gap-2.5 rounded-2xl border border-alice/10 bg-night/60 px-4 text-sm font-semibold text-alice/90">
+              <span className="h-2 w-2 rounded-full bg-nyx-light" aria-hidden="true" />
+              {item}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )
