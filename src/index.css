@@ -45,8 +45,8 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   /* O MotionConfig "user" não cobre transform em texto: aqui as entradas ficam só com o fade.
-     Barras de dado (data-bar) mantêm o transform, porque ele mostra o valor. */
-  [style*="transform"]:not([data-bar]) { transform: none !important; }
+     Barras de dado (data-bar) e o zoom da planta (data-zoom) mantêm o transform, porque ele mostra um estado. */
+  [style*="transform"]:not([data-bar]):not([data-zoom]) { transform: none !important; }
 }
 
 /* Brilho azul do gradiente da marca. */

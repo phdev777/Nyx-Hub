@@ -11,6 +11,7 @@ const TABS = [
   { id: 'producao', label: 'Painel de produção', desc: 'Quanto produziu, quanto parou e por quê, hora a hora.', icon: Gauge, from: 'Gestão de mineração', Screen: ProductionScreen },
   { id: 'manutencao', label: 'Manutenção', desc: 'Avisa antes da revisão vencer, máquina por máquina.', icon: Wrench, from: 'Gestão de mineração', Screen: MaintenanceScreen },
   { id: 'central', label: 'Central de operações', desc: 'Todas as empresas do grupo num lugar só.', icon: Building2, from: 'Portal de um grupo de empresas', Screen: CentralScreen },
+  { id: 'usina', label: 'Painel da usina', desc: 'O que está rodando, o que parou e quanto cada máquina produz.', icon: Factory, from: 'Gestão de usina', Screen: PlantPanelScreen },
   { id: 'diarias', label: 'Diárias e eventos', desc: 'Tudo o que aconteceu no turno, registrado na hora.', icon: CalendarClock, from: 'Gestão de usina', Screen: ShiftScreen },
   { id: 'planta', label: 'Planta 3D', desc: 'A usina inteira em 3D, para girar e explorar.', icon: Box, from: 'Gestão de usina', Screen: PlantScreen },
 ]
@@ -199,11 +200,18 @@ function ProductionScreen() {
           </ul>
         </Card>
       </div>
-      <Card title="Linha do tempo do turno">
+      <Timeline title="Linha do tempo do turno" rows={LINHA} />
+    </div>
+  )
+}
+
+function Timeline({ title, rows, labelWidth = 'w-14' }) {
+  return (
+      <Card title={title}>
         <ul className="space-y-2.5">
-          {LINHA.map((m, r) => (
+          {rows.map((m, r) => (
             <li key={m.tag} className="flex items-center gap-3">
-              <span className="w-14 shrink-0 font-mono text-xs text-alice/60">{m.tag}</span>
+              <span className={`${labelWidth} shrink-0 font-mono text-xs text-alice/60`}>{m.tag}</span>
               <div className="flex h-3 flex-1 gap-0.5 overflow-hidden rounded-full" role="img" aria-label={m.blocos.map(([tipo, pct]) => `${NOME[tipo]} ${pct}%`).join(', ')}>
                 {m.blocos.map(([tipo, pct], i) => (
                   <motion.span key={i} className={`h-full origin-left ${COR[tipo]}`} style={{ width: `${pct}%` }}
@@ -220,7 +228,6 @@ function ProductionScreen() {
           <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-rose-400/80" />Parado</span>
         </div>
       </Card>
-    </div>
   )
 }
 
@@ -323,7 +330,150 @@ function CentralScreen() {
   )
 }
 
-/* ---------- 4. Diárias e eventos ---------- */
+/* ---------- 4. Painel da usina ---------- */
+
+// Visão geral da usina: a planta no centro, a máquina escolhida ao lado e a linha do tempo embaixo.
+// Posição de cada máquina na foto da planta (em % da imagem), para marcar a escolhida.
+const MAQUINAS = [
+  { tag: 'BR-03', nota: '10:05 · voltou a operar após troca de mandíbula', nome: 'Britador', area: 'britagem', estado: 'op', vazao: 128, prod: 386, horas: '6.214', x: 27.6, y: 49, serie: [118, 122, 126, 121, 130, 127, 124, 129, 131, 126, 128, 128] },
+  { tag: 'PV-02', nota: '09:30 · tela limpa pelo operador', nome: 'Peneira', area: 'britagem', estado: 'op', vazao: 121, prod: 362, horas: '5.880', x: 41.5, y: 42, serie: [110, 114, 119, 117, 120, 116, 118, 122, 119, 121, 120, 121] },
+  { tag: 'TC-05', nota: '11:40 · aguardando material da britagem', nome: 'Correia', area: 'britagem', estado: 'sb', vazao: 0, prod: 340, horas: '7.102', x: 53.8, y: 42, serie: [112, 115, 118, 116, 114, 117, 96, 60, 22, 0, 0, 0] },
+  { tag: 'MM-01', nota: '11:10 · parada para troca de revestimento', nome: 'Moinho 1', area: 'moagem', estado: 'par', vazao: 0, prod: 214, horas: '9.315', x: 83.7, y: 45.9, serie: [66, 68, 65, 67, 64, 40, 0, 0, 0, 0, 0, 0] },
+  { tag: 'MM-05', nota: '08:15 · inspeção de rotina concluída', nome: 'Moinho 5', area: 'moagem', estado: 'op', vazao: 64, prod: 198, horas: '8.770', x: 79.9, y: 48.2, serie: [58, 60, 61, 63, 62, 64, 66, 63, 65, 64, 63, 64] },
+  { tag: 'FM-02', nota: '07:00 · início do turno sem pendências', nome: 'Filtro', area: 'moagem', estado: 'op', vazao: 58, prod: 176, horas: '4.402', x: 89.2, y: 52, serie: [50, 52, 55, 54, 56, 57, 55, 58, 57, 59, 58, 58] },
+]
+// Aproximação da foto em cada área: escala e ponto de origem.
+const AREAS = [
+  { id: 'geral', nome: 'Geral', zoom: 'scale(1.35)', origem: '54% 52%' },
+  { id: 'britagem', nome: 'Britagem', zoom: 'scale(2)', origem: '28% 48%' },
+  { id: 'moagem', nome: 'Moagem', zoom: 'scale(2.2)', origem: '84% 50%' },
+]
+const ESTADO = {
+  op: ['Operando', 'bg-emerald-400/10 text-emerald-300', 'ring-emerald-300'],
+  sb: ['Aguardando', 'bg-amber-300/15 text-amber-300', 'ring-amber-300'],
+  par: ['Parado', 'bg-rose-400/15 text-rose-300', 'ring-rose-300'],
+}
+const TURNOS = [['Turno A', true], ['Turno B', true], ['Turno C', false]]
+const LINHA_USINA = [
+  { tag: 'Britagem', blocos: [['op', 62], ['sb', 12], ['op', 26]] },
+  { tag: 'Moagem', blocos: [['op', 45], ['par', 30], ['op', 25]] },
+  { tag: 'Expedição', blocos: [['op', 30], ['sb', 20], ['op', 50]] },
+]
+
+// Gráfico de área da vazão (12 leituras, uma a cada 10 minutos).
+function AreaChart({ serie }) {
+  // A escala acompanha a própria série, para a variação aparecer mesmo quando a vazão é estável.
+  const lo = Math.max(0, Math.min(...serie) - 15)
+  const hi = Math.max(...serie) + 10
+  const pts = serie.map((v, i) => `${(i / (serie.length - 1)) * 100},${38 - ((v - lo) / (hi - lo)) * 32}`)
+  const linha = `M${pts.join(' L')}`
+  return (
+    <svg viewBox="0 0 100 40" preserveAspectRatio="none" className="h-24 w-full" aria-hidden="true">
+      <defs>
+        <linearGradient id="vazao-area" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor="#6e9bff" stopOpacity="0.45" />
+          <stop offset="100%" stopColor="#6e9bff" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path d={`${linha} L100,40 L0,40 Z`} fill="url(#vazao-area)" />
+      <path d={linha} fill="none" stroke="#6e9bff" strokeWidth="1.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function PlantPanelScreen() {
+  const [area, setArea] = useState('geral')
+  const [tag, setTag] = useState('BR-03')
+  const zona = AREAS.find((a) => a.id === area)
+  const lista = area === 'geral' ? MAQUINAS : MAQUINAS.filter((m) => m.area === area)
+  const maq = MAQUINAS.find((m) => m.tag === tag)
+  const [estado, estadoCor, anel] = ESTADO[maq.estado]
+
+  function escolherArea(id) {
+    setArea(id)
+    if (id !== 'geral' && maq.area !== id) setTag(MAQUINAS.find((m) => m.area === id).tag)
+  }
+
+  return (
+    <div className="grid gap-3">
+      <div className="flex flex-wrap items-center gap-2 text-xs">
+        <span className="text-alice/60">Turnos de hoje:</span>
+        {TURNOS.map(([nome, ok]) => (
+          <span key={nome} className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 ${ok ? 'bg-emerald-400/10 text-emerald-300' : 'bg-alice/5 text-alice/60'}`}>
+            {ok ? <Check size={12} aria-hidden="true" /> : <span className="h-1.5 w-1.5 rounded-full bg-amber-300" aria-hidden="true" />}
+            {nome} · {ok ? 'recebido' : 'em andamento'}
+          </span>
+        ))}
+      </div>
+      <div className="grid grid-cols-2 gap-3 @3xl:grid-cols-4">
+        <Kpi label="Produção do turno" value="412 t" note="+8% sobre o anterior" tone="up" />
+        <Kpi label="Meta do turno" value="450 t" note="92% atingido" />
+        <Kpi label="Produtividade" value="118 t/h" note="média do turno" />
+        <Kpi label="Paradas abertas" value="1" note="MM-01 · moinho 1" tone="down" />
+      </div>
+      <div className="grid gap-3 @3xl:grid-cols-[1.6fr_1fr]">
+        <Card>
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-xs font-medium uppercase tracking-[0.12em] text-alice/60">Planta</h3>
+            <div className="flex rounded-full bg-night p-1" role="group" aria-label="Área da planta">
+              {AREAS.map((a) => (
+                <button key={a.id} type="button" aria-pressed={area === a.id} onClick={() => escolherArea(a.id)}
+                  className={`min-h-8 rounded-full px-3 text-xs font-medium transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97] ${area === a.id ? 'bg-nyx text-alice' : 'text-alice/65 hover:text-alice/90'}`}>
+                  {a.nome}
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* A foto aproxima na área escolhida; o anel marca a máquina selecionada. */}
+          <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-night">
+            <div data-zoom className="absolute inset-0 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none" style={{ transform: zona.zoom, transformOrigin: zona.origem }}>
+              <img src={`${PLANTA_DIR}poster.jpg`} alt="" loading="lazy" decoding="async" width="1440" height="900" className="h-full w-full object-cover" />
+              <span className={`absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ${anel} animate-pulse motion-reduce:animate-none`} style={{ left: `${maq.x}%`, top: `${maq.y}%` }} aria-hidden="true" />
+            </div>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Máquina">
+            {lista.map((m) => (
+              <button key={m.tag} type="button" aria-pressed={tag === m.tag} onClick={() => setTag(m.tag)}
+                className={`inline-flex min-h-9 items-center gap-2 rounded-full border px-3 text-xs transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] ${tag === m.tag ? 'border-nyx/60 bg-nyx/15 text-alice' : 'border-alice/10 text-alice/70 hover:text-alice'}`}>
+                <span className={`h-1.5 w-1.5 rounded-full ${DOT[m.estado]}`} aria-hidden="true" />
+                <span className="font-mono">{m.tag}</span>
+              </button>
+            ))}
+          </div>
+        </Card>
+        <Card className="flex flex-col">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="font-mono text-xs text-alice/60">{maq.tag}</p>
+              <h3 className="mt-0.5 text-lg font-semibold">{maq.nome}</h3>
+            </div>
+            <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${estadoCor}`}>{estado}</span>
+          </div>
+          <dl className="mt-4 grid grid-cols-3 gap-2 text-xs">
+            <div><dt className="text-alice/60">Vazão agora</dt><dd className="mt-1 text-base font-bold tabular-nums">{maq.vazao} t/h</dd></div>
+            <div><dt className="text-alice/60">No turno</dt><dd className="mt-1 text-base font-bold tabular-nums">{maq.prod} t</dd></div>
+            <div><dt className="text-alice/60">Horímetro</dt><dd className="mt-1 text-base font-bold tabular-nums">{maq.horas} h</dd></div>
+          </dl>
+          <p className="mt-5 text-xs text-alice/60">Vazão nas últimas 2 horas (t/h)</p>
+          <motion.div key={maq.tag} className="mt-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2, ease: EASE_OUT }}
+            role="img" aria-label={`Vazão de ${maq.nome} nas últimas 2 horas: de ${maq.serie[0]} para ${maq.serie[maq.serie.length - 1]} toneladas por hora`}>
+            <AreaChart serie={maq.serie} />
+          </motion.div>
+          <div className="mt-1 flex justify-between text-[0.65rem] text-alice/60" aria-hidden="true"><span>-2h</span><span>-1h</span><span>agora</span></div>
+          <div className="mt-auto pt-5">
+            <div className="rounded-xl border border-alice/5 bg-prussian/40 p-3">
+              <p className="text-[0.7rem] uppercase tracking-[0.12em] text-alice/60">Último registro</p>
+              <p className="mt-1 text-sm text-alice/85">{maq.nota}</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+      <Timeline title="Linha do tempo da planta" rows={LINHA_USINA} labelWidth="w-20" />
+    </div>
+  )
+}
+
+/* ---------- 5. Diárias e eventos ---------- */
 
 const EVENTOS = [
   { hora: '07:00', tag: 'ESC-01', texto: 'Início do turno · horímetro 4.508,6 h', tipo: 'op' },
@@ -370,7 +520,7 @@ function ShiftScreen() {
   )
 }
 
-/* ---------- 5. Planta 3D ---------- */
+/* ---------- 6. Planta 3D ---------- */
 
 const PLANTA_DIR = '/demos/planta-3d/'
 const PLANTA = `${PLANTA_DIR}index.html`
