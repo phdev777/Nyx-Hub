@@ -211,10 +211,13 @@ function DemoPanel() {
 export function StackStrip() {
   return (
     <section aria-labelledby="o-que-fazemos" className="border-y border-alice/10 bg-prussian/30 px-4 py-8 sm:px-6">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
-        <h2 id="o-que-fazemos" className="shrink-0 text-xs font-semibold uppercase tracking-[0.16em] text-nyx-light">O que fazemos</h2>
-        <ul className="flex flex-wrap gap-3">
-          {stack.map((item) => (
+      <div className="mx-auto grid max-w-6xl gap-5 lg:grid-cols-[17rem_1fr] lg:items-center lg:gap-10">
+        <div>
+          <h2 id="o-que-fazemos" className="text-xs font-semibold uppercase tracking-[0.16em] text-nyx-light">{stack.label}</h2>
+          <p className="mt-2 text-pretty text-lg font-semibold leading-snug tracking-[-0.02em]">{stack.text}</p>
+        </div>
+        <ul className="flex flex-wrap gap-2.5 sm:gap-3">
+          {stack.items.map((item) => (
             <li key={item} className="inline-flex min-h-11 items-center gap-2.5 rounded-2xl border border-alice/10 bg-night/60 px-4 text-sm font-semibold text-alice/90">
               <span className="h-2 w-2 rounded-full bg-nyx-light" aria-hidden="true" />
               {item}

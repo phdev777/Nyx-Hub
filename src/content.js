@@ -36,7 +36,14 @@ export const demoPanel = {
 }
 
 // Pílulas abaixo do hero: o que fazemos, só os nomes, em linguagem simples (decidido em 31/10).
-export const stack = ['Automações', 'Integração com ERP', 'Agentes de IA']
+export const stack = {
+  label: 'O que fazemos',
+  text: 'Criamos o software do jeito que a sua empresa trabalha.',
+  items: [
+    'Software sob medida', 'Automações', 'Agentes de IA', 'Integração com ERP',
+    'Sistemas internos', 'Painéis e relatórios', 'Sistemas no celular e tablet', 'Sites',
+  ],
+}
 
 export const problem = {
   index: '01',
