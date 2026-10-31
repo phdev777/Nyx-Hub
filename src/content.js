@@ -9,7 +9,7 @@ export const contato = {
 
 export const nav = [
   { href: '#servicos', label: 'Serviços' },
-  { href: '#projetos', label: 'Projetos' },
+  { href: '#projetos', label: 'Exemplos' },
   { href: '#por-dentro', label: 'Por dentro' },
   { href: '#como-funciona', label: 'Como funciona' },
   { href: '#perguntas', label: 'Perguntas' },
@@ -20,7 +20,7 @@ export const hero = {
   title: ['Software do jeito', 'que a sua operação', 'funciona.'],
   text: 'A gente cria sistemas, automações e sites sob medida. Chega de planilha, retrabalho e ferramenta que não serve pro seu dia a dia.',
   primary: 'Contar o que eu preciso',
-  secondary: 'Ver projetos',
+  secondary: 'Ver exemplos',
 }
 
 // Painel ilustrativo do hero: mostra o tipo de coisa que entregamos, sem dados reais.
@@ -63,37 +63,34 @@ export const services = {
   ],
 }
 
-// Decidido em 31/10: nenhum cliente citado pelo nome.
+// Decidido em 31/10: nenhum cliente citado; os projetos aparecem como exemplos do que construímos.
 export const projects = {
   index: '03',
-  label: 'Projetos',
-  title: 'O que a gente já entregou.',
-  text: 'Sistemas feitos pela nossa equipe. Clientes identificados só com autorização.',
+  label: 'Exemplos',
+  title: 'O tipo de sistema que a gente constrói.',
+  text: 'Exemplos com nomes genéricos, para mostrar o tipo de problema que a gente resolve.',
   items: [
     {
       kind: 'Sistema de gestão',
-      name: 'Gestão de mineradora',
+      name: 'Gestão de mineração',
       problem: 'Diárias de máquinas no papel e relatórios montados à mão no fim do mês.',
       solution: 'Diária digital no tablet da frota, painel de produção, metas, pessoas, permissões por unidade e manutenção preventiva.',
       facts: ['Tablet em campo', 'Painel de produção', 'Manutenção preventiva'],
-      status: 'Em uso',
       image: { src: '/projetos/mineradora-tablet-2.jpg', alt: 'Operador registrando a diária no tablet fixado na parede da cabine da usina' },
     },
     {
       kind: 'Sistema de gestão',
-      name: 'Gestão de usina de calcário',
+      name: 'Gestão de usina',
       problem: 'Apontamentos por turno, eventos e produção espalhados em planilhas.',
       solution: 'Apontamento do operador por turno, eventos, produção, relatórios e a usina inteira em 3D, com o material correndo pelas correias.',
       facts: ['Planta 3D', 'Apontamento por turno', 'Relatórios'],
-      status: 'Entregue',
     },
     {
       kind: 'Portal',
-      name: 'Central de operações de um grupo',
+      name: 'Portal de um grupo de empresas',
       problem: 'Cada empresa do grupo com um sistema e um login diferentes.',
       solution: 'Um portal só, com login único, onde cada pessoa entra nas operações que o perfil dela permite.',
       facts: ['Login único', 'Várias empresas', 'Acesso por perfil'],
-      status: 'Em uso',
     },
     {
       kind: 'Site',
@@ -101,7 +98,6 @@ export const projects = {
       problem: 'Profissional sem presença on-line para receber novos clientes.',
       solution: 'Site próprio, rápido no celular, com apresentação dos serviços e contato direto.',
       facts: ['Feito para celular', 'Contato direto'],
-      status: 'Entregue',
     },
   ],
 }
@@ -109,8 +105,8 @@ export const projects = {
 export const showcase = {
   index: '04',
   label: 'Por dentro',
-  title: 'Veja as telas por dentro.',
-  text: 'Nomes e números aqui são fictícios, para proteger nossos clientes. As telas são as dos sistemas que construímos: produção, manutenção, central de operações, diárias e até a usina em 3D.',
+  title: 'Veja como fica por dentro.',
+  text: 'Telas de exemplo, com nomes e números fictícios: produção, manutenção, central de operações, diárias e até uma usina em 3D.',
 }
 
 export const process = {

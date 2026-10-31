@@ -56,12 +56,12 @@ export function Projects() {
               )}
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium uppercase tracking-[0.14em] text-nyx-light">{p.kind}</span>
-                <span className="inline-flex items-center gap-1.5 text-xs text-alice/65"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />{p.status}</span>
+                <span className="rounded-full border border-alice/10 px-2.5 py-0.5 text-xs text-alice/65">Exemplo</span>
               </div>
               <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em]">{p.name}</h3>
               <dl className="mt-5 space-y-4 text-sm leading-relaxed">
-                <div><dt className="text-alice/60">Problema</dt><dd className="mt-1 text-alice/75">{p.problem}</dd></div>
-                <div><dt className="text-alice/60">O que fizemos</dt><dd className="mt-1 text-alice/75">{p.solution}</dd></div>
+                <div><dt className="text-alice/60">O problema</dt><dd className="mt-1 text-alice/75">{p.problem}</dd></div>
+                <div><dt className="text-alice/60">A solução</dt><dd className="mt-1 text-alice/75">{p.solution}</dd></div>
               </dl>
               <ul className="mt-auto flex flex-wrap gap-2 pt-6">
                 {p.facts.map((f) => <li key={f} className="rounded-full border border-alice/10 px-3 py-1 text-xs text-alice/70">{f}</li>)}

@@ -6,13 +6,13 @@ import { Reveal, Section, SectionHead } from '../components/ui.jsx'
 
 const EASE_OUT = [0.23, 1, 0.32, 1]
 
-// Telas dos sistemas que já entregamos, com nomes e números fictícios para proteger os clientes.
+// Telas de exemplo do tipo de sistema que construímos, com nomes e números fictícios.
 const TABS = [
-  { id: 'producao', label: 'Painel de produção', icon: Gauge, from: 'Gestão de mineradora', Screen: ProductionScreen },
-  { id: 'manutencao', label: 'Manutenção', icon: Wrench, from: 'Gestão de mineradora', Screen: MaintenanceScreen },
-  { id: 'central', label: 'Central de operações', icon: Building2, from: 'Central de operações de um grupo', Screen: CentralScreen },
-  { id: 'diarias', label: 'Diárias e eventos', icon: CalendarClock, from: 'Gestão de usina de calcário', Screen: ShiftScreen },
-  { id: 'planta', label: 'Planta 3D', icon: Box, from: 'Gestão de usina de calcário', Screen: PlantScreen },
+  { id: 'producao', label: 'Painel de produção', icon: Gauge, from: 'Gestão de mineração', Screen: ProductionScreen },
+  { id: 'manutencao', label: 'Manutenção', icon: Wrench, from: 'Gestão de mineração', Screen: MaintenanceScreen },
+  { id: 'central', label: 'Central de operações', icon: Building2, from: 'Portal de um grupo de empresas', Screen: CentralScreen },
+  { id: 'diarias', label: 'Diárias e eventos', icon: CalendarClock, from: 'Gestão de usina', Screen: ShiftScreen },
+  { id: 'planta', label: 'Planta 3D', icon: Box, from: 'Gestão de usina', Screen: PlantScreen },
 ]
 
 export function Showcase() {
@@ -68,7 +68,7 @@ export function Showcase() {
             <div className="flex items-center gap-1.5" aria-hidden="true">
               <span className="h-2.5 w-2.5 rounded-full bg-alice/15" /><span className="h-2.5 w-2.5 rounded-full bg-alice/15" /><span className="h-2.5 w-2.5 rounded-full bg-alice/15" />
             </div>
-            <p className="min-w-0 truncate text-xs text-alice/60" title={`Projeto entregue: ${tab.from}`}><span className="hidden sm:inline">Projeto entregue: </span><span className="text-alice/80">{tab.from}</span></p>
+            <p className="min-w-0 truncate text-xs text-alice/60" title={`Exemplo: ${tab.from}`}><span className="hidden sm:inline">Exemplo: </span><span className="text-alice/80">{tab.from}</span></p>
             <span className="shrink-0 rounded-full bg-amber-400/10 px-2.5 py-1 text-[0.7rem] font-medium text-amber-300">Dados fictícios</span>
           </div>
           <AnimatePresence mode="wait" initial={false}>
