@@ -75,7 +75,7 @@ export const projects = {
   index: '03',
   label: 'Exemplos',
   title: 'O tipo de sistema que a gente constrói.',
-  text: 'Exemplos com nomes genéricos, para mostrar o tipo de problema que a gente resolve.',
+  text: 'Como a rotina fica antes e depois. Os nomes são genéricos, os problemas são do dia a dia.',
   items: [
     {
       kind: 'Sistema de gestão',
@@ -88,6 +88,7 @@ export const projects = {
     {
       kind: 'Sistema de gestão',
       name: 'Gestão de usina',
+      icon: 'usina',
       problem: 'O que acontecia em cada turno ficava espalhado em várias planilhas.',
       solution: 'O operador registra o turno no sistema e os relatórios saem prontos. E dá para ver a usina inteira em 3D.',
       facts: ['Planta 3D', 'Registro por turno', 'Relatórios'],
@@ -95,6 +96,7 @@ export const projects = {
     {
       kind: 'Portal',
       name: 'Portal de um grupo de empresas',
+      icon: 'portal',
       problem: 'Cada empresa do grupo com um sistema e um login diferentes.',
       solution: 'Um endereço só, com uma senha só. Cada pessoa vê as empresas que o cargo dela permite.',
       facts: ['Uma senha só', 'Várias empresas', 'Acesso por cargo'],
@@ -102,6 +104,7 @@ export const projects = {
     {
       kind: 'Site',
       name: 'Site profissional',
+      icon: 'site',
       problem: 'Sem site, quem procurava o serviço na internet não encontrava o profissional.',
       solution: 'Site próprio, rápido no celular, com apresentação dos serviços e contato direto.',
       facts: ['Feito para celular', 'Contato direto'],

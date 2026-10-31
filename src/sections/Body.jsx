@@ -1,6 +1,6 @@
 import { useId, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { Check, Plus, X } from 'lucide-react'
+import { Building2, Check, Factory, Globe, Plus, X } from 'lucide-react'
 import { faq, fit, problem, process, projects, services } from '../content.js'
 import { Reveal, Section, SectionHead, trackPointer } from '../components/ui.jsx'
 
@@ -40,34 +40,68 @@ export function Services() {
   )
 }
 
+// Ícone de cada exemplo sem foto (o de mineração tem a foto do tablet).
+const PROJETO_ICONE = { usina: Factory, portal: Building2, site: Globe }
+
+// Exemplos: o primeiro, com foto, ocupa a linha inteira; os outros três ficam lado a lado, todos da mesma altura.
 export function Projects() {
   return (
     <Section id="projetos" className="overflow-hidden">
       <div className="glow-bottom pointer-events-none absolute inset-x-0 bottom-0 h-2/3 opacity-60" aria-hidden="true" />
       <div className="relative">
         <SectionHead {...projects} />
-        <div className="mt-12 grid gap-4 md:grid-cols-2">
-          {projects.items.map((p, i) => (
-            <Reveal as="article" key={p.name} delay={i * 0.06} className="spotlight flex flex-col overflow-hidden rounded-3xl border border-alice/10 bg-night/85 p-6 transition-colors duration-200" onPointerMove={trackPointer}>
-              {p.image && (
-                <figure className="-mx-6 -mt-6 mb-6 aspect-[4/3] overflow-hidden border-b border-alice/10">
-                  <img src={p.image.src} alt={p.image.alt} loading="lazy" decoding="async" width="1000" height="1333" className="h-full w-full object-cover object-[50%_45%]" />
-                </figure>
-              )}
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium uppercase tracking-[0.14em] text-nyx-light">{p.kind}</span>
-                <span className="rounded-full border border-alice/10 px-2.5 py-0.5 text-xs text-alice/65">Exemplo</span>
-              </div>
-              <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em]">{p.name}</h3>
-              <dl className="mt-5 space-y-4 text-sm leading-relaxed">
-                <div><dt className="text-alice/60">O problema</dt><dd className="mt-1 text-alice/75">{p.problem}</dd></div>
-                <div><dt className="text-alice/60">A solução</dt><dd className="mt-1 text-alice/75">{p.solution}</dd></div>
-              </dl>
-              <ul className="mt-auto flex flex-wrap gap-2 pt-6">
-                {p.facts.map((f) => <li key={f} className="rounded-full border border-alice/10 px-3 py-1 text-xs text-alice/70">{f}</li>)}
-              </ul>
-            </Reveal>
-          ))}
+        <div className="mt-12 grid gap-4 lg:grid-cols-3">
+          {projects.items.map((p, i) => {
+            const destaque = Boolean(p.image)
+            const Icone = PROJETO_ICONE[p.icon]
+            return (
+              <Reveal
+                as="article"
+                key={p.name}
+                delay={i * 0.06}
+                onPointerMove={trackPointer}
+                className={`spotlight flex flex-col overflow-hidden rounded-3xl border border-alice/10 bg-night/85 transition-colors duration-200 ${destaque ? 'lg:col-span-3 lg:grid lg:grid-cols-2' : ''}`}
+              >
+                {destaque && (
+                  <figure className="relative aspect-[4/3] overflow-hidden border-b border-alice/10 lg:aspect-auto lg:min-h-[26rem] lg:border-r lg:border-b-0">
+                    <img src={p.image.src} alt={p.image.alt} loading="lazy" decoding="async" width="1000" height="1333" className="h-full w-full object-cover object-[50%_45%] lg:absolute lg:inset-0" />
+                  </figure>
+                )}
+                <div className={`flex flex-1 flex-col p-6 ${destaque ? 'sm:p-8 lg:justify-center lg:p-10' : ''}`}>
+                  <div className="flex items-center gap-3">
+                    {Icone && (
+                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-nyx/30 bg-nyx/10 text-nyx-light" aria-hidden="true">
+                        <Icone size={18} />
+                      </span>
+                    )}
+                    <span className="text-xs font-medium uppercase tracking-[0.14em] text-nyx-light">{p.kind}</span>
+                  </div>
+                  <h3 className={`mt-5 font-semibold tracking-[-0.02em] ${destaque ? 'text-2xl sm:text-3xl' : 'text-xl'}`}>{p.name}</h3>
+                  <dl className="mt-6 grid gap-3 text-sm leading-relaxed">
+                    <div className="rounded-2xl border border-alice/10 bg-alice/[0.03] p-4">
+                      <dt className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-alice/60">
+                        <span className="h-1.5 w-1.5 rounded-full bg-rose-300" aria-hidden="true" />Antes
+                      </dt>
+                      <dd className="mt-1.5 text-alice/75">{p.problem}</dd>
+                    </div>
+                    <div className="rounded-2xl border border-nyx/30 bg-nyx/[0.08] p-4">
+                      <dt className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-nyx-light">
+                        <span className="h-1.5 w-1.5 rounded-full bg-nyx-light" aria-hidden="true" />Depois
+                      </dt>
+                      <dd className="mt-1.5 text-alice/90">{p.solution}</dd>
+                    </div>
+                  </dl>
+                  <ul className="mt-auto flex flex-wrap gap-2 pt-6">
+                    {p.facts.map((f) => (
+                      <li key={f} className="inline-flex items-center gap-1.5 rounded-full border border-alice/10 px-3 py-1 text-xs text-alice/75">
+                        <Check size={12} className="text-nyx-light" aria-hidden="true" />{f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            )
+          })}
         </div>
       </div>
     </Section>
