@@ -1,8 +1,8 @@
 import { useId, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { Building2, Check, Factory, FileCheck2, Globe, Hammer, MessagesSquare, Plus, Rocket, X } from 'lucide-react'
+import { Building2, Check, Factory, FileCheck2, Globe, Hammer, MessageCircle, MessagesSquare, Plus, Rocket, X } from 'lucide-react'
 import { faq, fit, problem, process, projects, services } from '../content.js'
-import { Reveal, Section, SectionHead, trackPointer } from '../components/ui.jsx'
+import { Button, Reveal, Section, SectionHead, contactLabel, trackPointer, whatsappHref } from '../components/ui.jsx'
 
 const EASE_OUT = [0.23, 1, 0.32, 1]
 
@@ -190,31 +190,33 @@ export function Fit() {
   )
 }
 
+// Perguntas: uma por cartão, com a aberta em destaque. O atalho para o WhatsApp fica abaixo do título no computador
+// e depois da lista no celular, para quem não achou a resposta.
 export function Faq() {
   const [open, setOpen] = useState(0)
   const base = useId()
   return (
     <Section id="perguntas">
-      <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
+      <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-8">
         <SectionHead {...faq} />
-        <div className="divide-y divide-alice/10 border-y border-alice/10">
+        <ul className="grid content-start gap-3 lg:col-start-2 lg:row-span-2 lg:row-start-1">
           {faq.items.map((item, i) => {
             const isOpen = open === i
             const panelId = `${base}-p${i}`
             const buttonId = `${base}-b${i}`
             return (
-              <div key={item.q}>
+              <li key={item.q} className={`rounded-2xl border transition-[background-color,border-color] duration-200 ease-out ${isOpen ? 'border-nyx/40 bg-prussian/50' : 'border-alice/10 bg-night/60 hover:border-alice/20'}`}>
                 <h3>
                   <button
                     id={buttonId}
                     type="button"
-                    className="flex min-h-16 w-full items-center justify-between gap-4 py-4 text-left text-base font-medium transition-transform duration-150 ease-out active:scale-[0.99]"
+                    className="flex min-h-16 w-full items-center justify-between gap-4 px-5 py-4 text-left text-base font-semibold transition-transform duration-150 ease-out active:scale-[0.99]"
                     aria-expanded={isOpen}
                     aria-controls={panelId}
                     onClick={() => setOpen(isOpen ? -1 : i)}
                   >
                     {item.q}
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-alice/15 text-alice/70">
+                    <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-[background-color,border-color,color] duration-200 ease-out ${isOpen ? 'border-nyx bg-nyx text-alice' : 'border-alice/15 text-alice/70'}`}>
                       <Plus size={16} aria-hidden="true" className={`transition-transform duration-200 ease-out ${isOpen ? 'rotate-45' : ''}`} />
                     </span>
                   </button>
@@ -231,14 +233,22 @@ export function Faq() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.25, ease: EASE_OUT }}
                     >
-                      <p className="pb-5 pr-12 text-sm leading-relaxed text-alice/65">{item.a}</p>
+                      <p className="px-5 pb-5 pr-14 text-sm leading-relaxed text-alice/75">{item.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </li>
             )
           })}
-        </div>
+        </ul>
+        <Reveal className="rounded-3xl border border-alice/10 bg-prussian/40 p-6 lg:col-start-1 lg:row-start-2 lg:self-start">
+          <span className="grid h-10 w-10 place-items-center rounded-xl border border-nyx/30 bg-nyx/10 text-nyx-light" aria-hidden="true">
+            <MessageCircle size={18} />
+          </span>
+          <p className="mt-4 text-lg font-semibold">{faq.ajuda.titulo}</p>
+          <p className="mt-1 text-sm leading-relaxed text-alice/65">{faq.ajuda.texto}</p>
+          <Button href={whatsappHref(faq.ajuda.mensagem)} className="mt-5">{contactLabel()}</Button>
+        </Reveal>
       </div>
     </Section>
   )

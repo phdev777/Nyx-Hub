@@ -152,9 +152,17 @@ export const faq = {
   index: '07',
   label: 'Perguntas',
   title: 'Perguntas frequentes.',
+  text: 'O que as empresas mais perguntam antes de começar.',
+  ajuda: {
+    titulo: 'Não achou a sua pergunta?',
+    texto: 'Manda no WhatsApp. Quem responde é quem constrói.',
+    mensagem: 'Olá! Tenho uma dúvida sobre a Nyx Hub.',
+  },
   items: [
     { q: 'Quanto custa um projeto?', a: 'Depende do tamanho. Depois da primeira conversa, enviamos uma proposta com o que vai ser feito, o prazo e o preço fechado. Sem cobrança por hora.' },
     { q: 'Quanto tempo leva?', a: 'Em geral, um site sai em 1 a 2 semanas. Sistemas levam de 4 a 8 semanas na primeira versão. O prazo exato vai na proposta.' },
+    { q: 'Preciso entender de tecnologia?', a: 'Não. Você explica como a sua empresa trabalha, do seu jeito. A parte técnica fica com a gente.' },
+    { q: 'Dá para aproveitar as planilhas que eu já uso?', a: 'Sim. Trazemos os dados das planilhas para o sistema novo, e ele pode conversar com o sistema que a empresa já usa.' },
     { q: 'Funciona no celular e no tablet?', a: 'Sim. Pensamos no celular e no tablet desde o início, inclusive para sistemas usados em campo.' },
     { q: 'E depois que entrega?', a: 'O suporte fica combinado na proposta: corrigimos o que aparecer e evoluímos o sistema conforme a empresa cresce.' },
     { q: 'Meus dados ficam seguros?', a: 'Sim. Cada pessoa vê só o que o cargo dela permite, e essa regra vale no sistema inteiro, não só na tela.' },
