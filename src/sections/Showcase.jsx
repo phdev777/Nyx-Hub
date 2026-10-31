@@ -1,5 +1,5 @@
 import { useId, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import { motion } from 'motion/react'
 import { Box, Building2, CalendarClock, Check, Factory, Gauge, Wrench } from 'lucide-react'
 import { showcase } from '../content.js'
 import { Reveal, Section, SectionHead } from '../components/ui.jsx'
@@ -8,11 +8,11 @@ const EASE_OUT = [0.23, 1, 0.32, 1]
 
 // Telas de exemplo do tipo de sistema que construímos, com nomes e números fictícios.
 const TABS = [
-  { id: 'producao', label: 'Painel de produção', icon: Gauge, from: 'Gestão de mineração', Screen: ProductionScreen },
-  { id: 'manutencao', label: 'Manutenção', icon: Wrench, from: 'Gestão de mineração', Screen: MaintenanceScreen },
-  { id: 'central', label: 'Central de operações', icon: Building2, from: 'Portal de um grupo de empresas', Screen: CentralScreen },
-  { id: 'diarias', label: 'Diárias e eventos', icon: CalendarClock, from: 'Gestão de usina', Screen: ShiftScreen },
-  { id: 'planta', label: 'Planta 3D', icon: Box, from: 'Gestão de usina', Screen: PlantScreen },
+  { id: 'producao', label: 'Painel de produção', desc: 'Quanto produziu, quanto parou e por quê, hora a hora.', icon: Gauge, from: 'Gestão de mineração', Screen: ProductionScreen },
+  { id: 'manutencao', label: 'Manutenção', desc: 'Avisa antes da revisão vencer, máquina por máquina.', icon: Wrench, from: 'Gestão de mineração', Screen: MaintenanceScreen },
+  { id: 'central', label: 'Central de operações', desc: 'Todas as empresas do grupo num lugar só.', icon: Building2, from: 'Portal de um grupo de empresas', Screen: CentralScreen },
+  { id: 'diarias', label: 'Diárias e eventos', desc: 'Tudo o que aconteceu no turno, registrado na hora.', icon: CalendarClock, from: 'Gestão de usina', Screen: ShiftScreen },
+  { id: 'planta', label: 'Planta 3D', desc: 'A usina inteira em 3D, para girar e explorar.', icon: Box, from: 'Gestão de usina', Screen: PlantScreen },
 ]
 
 export function Showcase() {
@@ -28,7 +28,9 @@ export function Showcase() {
 
   function onKey(e) {
     const i = TABS.findIndex((t) => t.id === active)
-    const next = e.key === 'ArrowRight' ? (i + 1) % TABS.length : e.key === 'ArrowLeft' ? (i - 1 + TABS.length) % TABS.length : null
+    const fwd = e.key === 'ArrowRight' || e.key === 'ArrowDown'
+    const back = e.key === 'ArrowLeft' || e.key === 'ArrowUp'
+    const next = fwd ? (i + 1) % TABS.length : back ? (i - 1 + TABS.length) % TABS.length : null
     if (next === null) return
     e.preventDefault()
     choose(TABS[next].id)
@@ -38,8 +40,9 @@ export function Showcase() {
   return (
     <Section id="por-dentro">
       <SectionHead {...showcase} />
-      <Reveal className="mt-10">
-        <motion.div layoutScroll role="tablist" aria-label="Telas de exemplo" onKeyDown={onKey} className="-mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto overscroll-x-contain px-4 pb-2 [mask-image:linear-gradient(to_right,#000_85%,transparent)] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0 sm:[mask-image:none]">
+      {/* No computador: lista de telas à esquerda, com uma frase em cada; no celular: pílulas que rolam para o lado. */}
+      <Reveal className="mt-10 lg:grid lg:grid-cols-[16rem_1fr] lg:items-start lg:gap-6">
+        <motion.div layoutScroll role="tablist" aria-label="Telas de exemplo" onKeyDown={onKey} className="-mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto overscroll-x-contain px-4 pb-2 [mask-image:linear-gradient(to_right,#000_85%,transparent)] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0 sm:[mask-image:none] lg:sticky lg:top-24 lg:flex-col lg:gap-1.5 lg:overflow-visible lg:pb-0">
           {TABS.map((t) => {
             const selected = t.id === active
             return (
@@ -52,18 +55,25 @@ export function Showcase() {
                 aria-controls={`${base}-panel`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => choose(t.id)}
-                className={`relative inline-flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full px-4 text-sm font-medium transition-[color,transform] duration-150 ease-out active:scale-[0.97] ${selected ? 'text-alice' : 'text-alice/65 hover:text-alice/90'}`}
+                className={`relative inline-flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full px-4 text-left text-sm font-medium transition-[color,transform] duration-150 ease-out active:scale-[0.97] lg:w-full lg:items-start lg:gap-3 lg:rounded-2xl lg:p-3 lg:active:scale-[0.99] ${selected ? 'text-alice' : 'text-alice/65 hover:text-alice/90'}`}
               >
-                {/* A pílula azul desliza até a aba escolhida. */}
-                {selected && <motion.span layoutId="showcase-pill" className="absolute inset-0 rounded-full bg-nyx" transition={{ type: 'spring', duration: 0.45, bounce: 0.15 }} />}
-                <t.icon size={16} className="relative" aria-hidden="true" />
-                <span className="relative">{t.label}</span>
+                {/* O destaque desliza até a aba escolhida: pílula azul no celular, cartão com borda no computador. */}
+                {selected && <motion.span layoutId="showcase-pill" className="absolute inset-0 rounded-full bg-nyx lg:rounded-2xl lg:bg-nyx/15 lg:ring-1 lg:ring-nyx/50" transition={{ type: 'spring', duration: 0.35, bounce: 0 }} />}
+                <span className={`relative lg:grid lg:h-9 lg:w-9 lg:shrink-0 lg:place-items-center lg:rounded-xl lg:border ${selected ? 'lg:border-nyx/40 lg:bg-nyx lg:text-alice' : 'lg:border-alice/10 lg:bg-night/60 lg:text-nyx-light'}`}>
+                  <t.icon size={16} aria-hidden="true" />
+                </span>
+                <span className="relative">
+                  <span className="block lg:font-semibold">{t.label}</span>
+                  <span className={`mt-0.5 hidden text-xs font-normal leading-snug lg:block ${selected ? 'text-alice/75' : 'text-alice/55'}`}>{t.desc}</span>
+                </span>
               </button>
             )
           })}
         </motion.div>
 
-        <div id={`${base}-panel`} tabIndex={0} role="tabpanel" aria-labelledby={`${base}-tab-${active}`} className="mt-5 overflow-hidden rounded-3xl border border-alice/10 bg-prussian/50 shadow-[0_40px_120px_-50px_rgb(24_93_241/0.55)]">
+        <p className="mt-3 text-sm text-alice/70 lg:hidden">{tab.desc}</p>
+
+        <div id={`${base}-panel`} tabIndex={0} role="tabpanel" aria-labelledby={`${base}-tab-${active}`} className="@container mt-4 overflow-hidden lg:mt-0 rounded-3xl border border-alice/10 bg-prussian/50 shadow-[0_40px_120px_-50px_rgb(24_93_241/0.55)]">
           <div className="flex items-center justify-between gap-3 border-b border-alice/10 px-4 py-3 sm:px-5">
             <div className="flex items-center gap-1.5" aria-hidden="true">
               <span className="h-2.5 w-2.5 rounded-full bg-alice/15" /><span className="h-2.5 w-2.5 rounded-full bg-alice/15" /><span className="h-2.5 w-2.5 rounded-full bg-alice/15" />
@@ -71,18 +81,16 @@ export function Showcase() {
             <p className="min-w-0 truncate text-xs text-alice/60" title={`Exemplo: ${tab.from}`}><span className="hidden sm:inline">Exemplo: </span><span className="text-alice/80">{tab.from}</span></p>
             <span className="shrink-0 rounded-full bg-amber-400/10 px-2.5 py-1 text-[0.7rem] font-medium text-amber-300">Dados fictícios</span>
           </div>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={active}
-              initial={{ opacity: 0, transform: 'translateY(8px)' }}
-              animate={{ opacity: 1, transform: 'translateY(0px)' }}
-              exit={{ opacity: 0, transform: 'translateY(-4px)', transition: { duration: 0.1 } }}
-              transition={{ duration: 0.22, ease: EASE_OUT }}
-              className="p-4 sm:p-6"
-            >
-              <tab.Screen />
-            </motion.div>
-          </AnimatePresence>
+          {/* A tela nova entra na hora, sem esperar a anterior sair: dá para trocar de aba rápido sem travar. */}
+          <motion.div
+            key={active}
+            initial={{ opacity: 0, transform: 'translateY(6px)' }}
+            animate={{ opacity: 1, transform: 'translateY(0px)' }}
+            transition={{ duration: 0.2, ease: EASE_OUT }}
+            className="p-4 sm:p-6"
+          >
+            <tab.Screen />
+          </motion.div>
         </div>
       </Reveal>
     </Section>
@@ -164,13 +172,13 @@ function ProductionScreen() {
   const maxParada = Math.max(...PARADAS.map((p) => p.min))
   return (
     <div className="grid gap-3">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 @3xl:grid-cols-4">
         <Kpi label="Produção do dia" value="1.361 t" note="+6% sobre ontem" tone="up" />
         <Kpi label="Horas trabalhadas" value="142,5 h" note="18 equipamentos" />
         <Kpi label="Disponibilidade" value="91%" note="meta: 88%" tone="up" />
         <Kpi label="Tempo parado" value="3h40" note="+25 min sobre ontem" tone="down" />
       </div>
-      <div className="grid gap-3 lg:grid-cols-[1.6fr_1fr]">
+      <div className="grid gap-3 @3xl:grid-cols-[1.6fr_1fr]">
         <Card title="Produção por hora (t)">
           <div className="flex h-40 items-end gap-1.5 sm:gap-2" role="img" aria-label="Gráfico de barras com a produção de cada hora do turno, entre 40 e 136 toneladas">
             {PRODUCAO_HORA.map((v, i) => (
@@ -228,7 +236,7 @@ const situacao = (u) => (u >= 100 ? ['Vencida', 'bg-rose-400/15 text-rose-300', 
 
 function MaintenanceScreen() {
   return (
-    <div className="grid gap-3 lg:grid-cols-[1.7fr_1fr]">
+    <div className="grid gap-3 @3xl:grid-cols-[1.7fr_1fr]">
       <Card title="Próximas revisões">
         <ul className="divide-y divide-alice/5">
           {EQUIPS.map((e, i) => {
@@ -276,7 +284,7 @@ const PERMISSOES = [
 
 function CentralScreen() {
   return (
-    <div className="grid gap-3 lg:grid-cols-[1.4fr_1fr]">
+    <div className="grid gap-3 @4xl:grid-cols-[1.4fr_1fr]">
       <div className="grid gap-3 sm:grid-cols-2">
         {UNIDADES.map((u, i) => (
           <motion.div key={u.nome} initial={{ opacity: 0, transform: 'translateY(8px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.4, ease: EASE_OUT, delay: i * 0.05 }}>
@@ -330,7 +338,7 @@ function ShiftScreen() {
   const feitos = 18, total = 21
   const C = 2 * Math.PI * 34
   return (
-    <div className="grid gap-3 lg:grid-cols-[1.6fr_1fr]">
+    <div className="grid gap-3 @3xl:grid-cols-[1.6fr_1fr]">
       <Card title="Eventos do turno · hoje">
         <ol className="relative space-y-4 pl-5 before:absolute before:bottom-1 before:left-[5px] before:top-1 before:w-px before:bg-alice/10">
           {EVENTOS.map((e, i) => (
@@ -363,7 +371,8 @@ function ShiftScreen() {
 
 /* ---------- 5. Planta 3D ---------- */
 
-const PLANTA = '/demos/planta-3d/index.html'
+const PLANTA_DIR = '/demos/planta-3d/'
+const PLANTA = `${PLANTA_DIR}index.html`
 const PLANTA_EMBED = `${PLANTA}?embed=1`
 
 function PlantScreen() {
@@ -374,12 +383,13 @@ function PlantScreen() {
       {load ? (
         <iframe src={PLANTA_EMBED} title="Planta 3D interativa de uma usina de demonstração" className="h-full w-full border-0" loading="lazy" />
       ) : (
-        <div className="grid-lines absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
-          <Box size={36} className="text-nyx-light" aria-hidden="true" />
-          <p className="max-w-sm text-sm text-alice/70">Uma usina inteira em 3D. Dá para girar, aproximar e clicar em cada máquina.</p>
+        <div className="absolute inset-0 flex flex-col items-center justify-end gap-4 p-6 text-center sm:p-8">
+          <img src={`${PLANTA_DIR}poster.jpg`} alt="" loading="lazy" decoding="async" width="1440" height="900" className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-night via-night/50 to-transparent to-60%" aria-hidden="true" />
+          <p className="relative max-w-sm text-sm font-medium text-alice/90">Uma usina inteira em 3D. Dá para girar, aproximar e clicar em cada máquina.</p>
           {/* No celular, a cena dentro da página prende o dedo e atrapalha a rolagem: abre em outra aba, em tela cheia. */}
-          <a href={PLANTA} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] sm:hidden">Abrir planta 3D<span className="sr-only"> em outra aba</span></a>
-          <button type="button" onClick={() => setLoad(true)} className="hidden min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold transition-[background-color,transform] duration-150 ease-out hover:bg-[#1450d6] active:scale-[0.97] sm:inline-flex">Abrir planta 3D</button>
+          <a href={PLANTA} target="_blank" rel="noreferrer" className="relative inline-flex min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] sm:hidden">Abrir planta 3D<span className="sr-only"> em outra aba</span></a>
+          <button type="button" onClick={() => setLoad(true)} className="relative hidden min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold shadow-[0_10px_40px_-10px_rgb(24_93_241/0.8)] transition-[background-color,transform] duration-150 ease-out hover:bg-[#1450d6] active:scale-[0.97] sm:inline-flex">Abrir planta 3D</button>
         </div>
       )}
     </div>
