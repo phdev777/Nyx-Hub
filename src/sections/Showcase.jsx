@@ -308,7 +308,7 @@ function CentralScreen() {
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-[0.7rem] text-alice/60">A regra vale no sistema inteiro: a tela só mostra o que o perfil permite.</p>
+        <p className="mt-3 text-[0.7rem] text-alice/60">A regra vale no sistema inteiro: cada pessoa só vê o que o cargo permite.</p>
       </Card>
     </div>
   )
@@ -376,7 +376,7 @@ function PlantScreen() {
       ) : (
         <div className="grid-lines absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
           <Box size={36} className="text-nyx-light" aria-hidden="true" />
-          <p className="max-w-sm text-sm text-alice/70">Usina de britagem e moagem em 3D: o material corre pelas correias, e dá para girar, aproximar e clicar nos equipamentos.</p>
+          <p className="max-w-sm text-sm text-alice/70">Uma usina inteira em 3D. Dá para girar, aproximar e clicar em cada máquina.</p>
           {/* No celular, a cena dentro da página prende o dedo e atrapalha a rolagem: abre em outra aba, em tela cheia. */}
           <a href={PLANTA} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] sm:hidden">Abrir planta 3D<span className="sr-only"> em outra aba</span></a>
           <button type="button" onClick={() => setLoad(true)} className="hidden min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold transition-[background-color,transform] duration-150 ease-out hover:bg-[#1450d6] active:scale-[0.97] sm:inline-flex">Abrir planta 3D</button>
