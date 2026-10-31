@@ -67,3 +67,50 @@
   background-size: 56px 56px;
   mask-image: radial-gradient(70% 60% at 50% 40%, #000 30%, transparent 80%);
 }
+
+/* ===== Movimento ===== */
+:root { --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); }
+
+/* Estrelas do fundo do hero: piscam devagar, cada uma no seu tempo. */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.9; }
+}
+.star {
+  position: absolute;
+  border-radius: 9999px;
+  background: var(--color-alice);
+  animation: twinkle var(--d, 5s) ease-in-out var(--delay, 0s) infinite;
+}
+
+/* Brilho azul "respirando" atrás do hero e do contato. */
+@keyframes breathe {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+.glow-breathe { animation: breathe 9s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .star { animation: none; opacity: 0.45; }
+  .glow-breathe { animation: none; }
+}
+
+/* Brilho que segue o cursor nos cards (só com mouse; no toque não existe hover). */
+.spotlight { position: relative; isolation: isolate; }
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--x, 50%) var(--y, 50%), rgb(24 93 241 / 0.16), transparent 45%);
+  opacity: 0;
+  transition: opacity 250ms ease;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .spotlight:hover::before { opacity: 1; }
+  .spotlight:hover { border-color: rgb(24 93 241 / 0.45); }
+  .group:hover .nudge { transform: translateX(3px); }
+}
+.nudge { transition: transform 200ms var(--ease-out); }

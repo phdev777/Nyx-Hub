@@ -22,6 +22,28 @@ export function LogoMark({ className = '' }) {
   )
 }
 
+// Posição do cursor no próprio card (CSS var no elemento, sem re-render do React).
+export function trackPointer(e) {
+  const r = e.currentTarget.getBoundingClientRect()
+  e.currentTarget.style.setProperty('--x', `${e.clientX - r.left}px`)
+  e.currentTarget.style.setProperty('--y', `${e.clientY - r.top}px`)
+}
+
+// Céu estrelado discreto, com posições fixas (mesmo desenho em toda visita).
+const STARS = Array.from({ length: 42 }, (_, i) => {
+  const r = (n) => ((Math.sin((i + 1) * n) * 10000) % 1 + 1) % 1
+  return { left: r(12.9898) * 100, top: r(78.233) * 70, size: r(39.425) > 0.85 ? 2 : 1, d: 3 + r(4.1) * 5, delay: r(9.7) * 6 }
+})
+export function Stars() {
+  return (
+    <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      {STARS.map((s, i) => (
+        <span key={i} className="star" style={{ left: `${s.left}%`, top: `${s.top}%`, width: s.size, height: s.size, '--d': `${s.d}s`, '--delay': `-${s.delay}s` }} />
+      ))}
+    </div>
+  )
+}
+
 export function whatsappHref(message = 'Olá! Quero conversar sobre um projeto com a Nyx Hub.') {
   if (!contato.whatsapp) return '#contato'
   return `https://wa.me/${contato.whatsapp}?text=${encodeURIComponent(message)}`
@@ -36,7 +58,7 @@ export function Button({ href, variant = 'primary', children, className = '', ..
     <a
       href={href}
       {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
-      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-[0.95rem] font-semibold transition-[background-color,border-color,transform] duration-150 ease-out active:scale-[0.97] ${styles} ${className}`}
+      className={`group inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-[0.95rem] font-semibold transition-[background-color,border-color,transform] duration-150 ease-out active:scale-[0.97] ${styles} ${className}`}
       {...rest}
     >
       {children}
@@ -58,10 +80,11 @@ export function SectionHead({ index, label, title, text, align = 'left' }) {
 }
 
 // Entrada ao rolar: sobe 16px e aparece, uma vez só.
-export function Reveal({ children, delay = 0, className = '', as = 'div' }) {
+export function Reveal({ children, delay = 0, className = '', as = 'div', ...rest }) {
   const Tag = motion[as]
   return (
     <Tag
+      {...rest}
       className={className}
       initial={{ opacity: 0, transform: 'translateY(16px)' }}
       whileInView={{ opacity: 1, transform: 'translateY(0px)' }}

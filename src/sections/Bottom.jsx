@@ -25,7 +25,7 @@ export function Contact() {
 
   return (
     <section id="contato" className="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32">
-      <div className="glow-bottom pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="glow-bottom glow-breathe pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="relative mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-2">
         <Reveal>
           <LogoMark className="h-12 w-12 text-nyx-light" />

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { ArrowRight, Check, Menu, X } from 'lucide-react'
 import { demoPanel, hero, nav, stack } from '../content.js'
-import { Button, Logo, whatsappHref } from '../components/ui.jsx'
+import { Button, Logo, Stars, whatsappHref } from '../components/ui.jsx'
 
 const EASE_OUT = [0.23, 1, 0.32, 1]
 
@@ -65,8 +65,9 @@ export function Header() {
 export function Hero() {
   return (
     <section id="topo" className="relative overflow-hidden px-4 pb-20 pt-32 sm:px-6 sm:pb-28 sm:pt-40">
-      <div className="glow-bottom pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="glow-bottom glow-breathe pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden="true" />
+      <Stars />
       <div className="relative mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.15fr_1fr]">
         <div>
           <motion.p
@@ -77,16 +78,18 @@ export function Hero() {
             {hero.eyebrow}
           </motion.p>
           <h1 className="mt-6 text-[2.6rem] font-extrabold leading-[1.02] tracking-[-0.045em] sm:text-6xl lg:text-[4.4rem]">
+            {/* Cada linha sobe de trás de uma máscara, uma depois da outra. */}
             {hero.title.map((line, i) => (
-              <motion.span
-                key={line}
-                className={`block ${i === hero.title.length - 1 ? 'text-nyx-light' : ''}`}
-                initial={{ opacity: 0, transform: 'translateY(18px)' }}
-                animate={{ opacity: 1, transform: 'translateY(0px)' }}
-                transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.08 + i * 0.07 }}
-              >
-                {line}
-              </motion.span>
+              <span key={line} className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
+                <motion.span
+                  className={`block ${i === hero.title.length - 1 ? 'text-nyx-light' : ''}`}
+                  initial={{ opacity: 0, transform: 'translateY(105%)' }}
+                  animate={{ opacity: 1, transform: 'translateY(0%)' }}
+                  transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.1 + i * 0.08 }}
+                >
+                  {line}
+                </motion.span>
+              </span>
             ))}
           </h1>
           <motion.p
@@ -101,20 +104,28 @@ export function Hero() {
             animate={{ opacity: 1, transform: 'translateY(0px)' }}
             transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.45 }}
           >
-            <Button href={whatsappHref()}>{hero.primary}<ArrowRight size={18} aria-hidden="true" /></Button>
+            <Button href={whatsappHref()}>{hero.primary}<ArrowRight size={18} className="nudge" aria-hidden="true" /></Button>
             <Button href="#projetos" variant="ghost">{hero.secondary}</Button>
           </motion.div>
         </div>
         <motion.div
-          initial={{ opacity: 0, transform: 'translateY(24px) scale(0.98)' }}
+          initial={{ opacity: 0, transform: 'translateY(24px) scale(0.97)' }}
           animate={{ opacity: 1, transform: 'translateY(0px) scale(1)' }}
-          transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.25 }}
+          transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.3 }}
         >
-          <DemoPanel />
+          <Parallax><DemoPanel /></Parallax>
         </motion.div>
       </div>
     </section>
   )
+}
+
+// O painel sobe um pouco mais devagar que a página ao rolar (profundidade). Desligado com menos movimento.
+function Parallax({ children }) {
+  const reduce = useReducedMotion()
+  const { scrollY } = useScroll()
+  const transform = useTransform(scrollY, [0, 700], ['translateY(0px)', 'translateY(-48px)'])
+  return <motion.div style={reduce ? undefined : { transform }}>{children}</motion.div>
 }
 
 // Painel ilustrativo: as linhas vão de "pendente" para "feito", uma por vez, em ciclo.
@@ -142,15 +153,33 @@ function DemoPanel() {
           return (
             <li key={row.label} className="flex items-center justify-between gap-3 rounded-2xl border border-alice/5 bg-night/60 px-4 py-3.5">
               <span className="text-sm text-alice/85">{row.label}</span>
-              <span className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors duration-300 ${ok ? 'bg-nyx/20 text-nyx-light' : 'bg-alice/5 text-alice/45'}`}>
-                {ok ? <Check size={13} aria-hidden="true" /> : <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-alice/40 motion-reduce:animate-none" aria-hidden="true" />}
-                {ok ? row.done : row.pending}
+              <span className={`inline-grid shrink-0 overflow-hidden rounded-full text-xs font-medium transition-colors duration-300 ${ok ? 'bg-nyx/20 text-nyx-light' : 'bg-alice/5 text-alice/45'}`}>
+                {/* Troca de estado: o rótulo antigo sai para cima e o novo entra por baixo. */}
+                <AnimatePresence initial={false} mode="popLayout">
+                  <motion.span
+                    key={ok ? 'ok' : 'wait'}
+                    className="col-start-1 row-start-1 inline-flex items-center gap-1.5 px-2.5 py-1"
+                    initial={{ opacity: 0, transform: 'translateY(60%)' }}
+                    animate={{ opacity: 1, transform: 'translateY(0%)' }}
+                    exit={{ opacity: 0, transform: 'translateY(-60%)' }}
+                    transition={{ duration: 0.25, ease: EASE_OUT }}
+                  >
+                    {ok ? <Check size={13} aria-hidden="true" /> : <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-alice/40 motion-reduce:animate-none" aria-hidden="true" />}
+                    {ok ? row.done : row.pending}
+                  </motion.span>
+                </AnimatePresence>
               </span>
             </li>
           )
         })}
       </ul>
-      <div className="mt-5 flex items-center justify-between gap-3 border-t border-alice/10 pt-4">
+      <div className="mt-5 h-1 overflow-hidden rounded-full bg-alice/5" aria-hidden="true">
+        <div
+          className="h-full origin-left rounded-full bg-gradient-to-r from-nyx to-nyx-light transition-transform duration-500 ease-[var(--ease-out)]"
+          style={{ transform: `scaleX(${finished / total})` }}
+        />
+      </div>
+      <div className="mt-4 flex items-center justify-between gap-3">
         <span className="text-xs text-alice/50">{demoPanel.footer}</span>
         <span className="font-mono text-sm font-semibold tabular-nums text-alice">{finished}/{total}</span>
       </div>

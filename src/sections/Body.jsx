@@ -1,8 +1,8 @@
-import { useId, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
-import { Check, Minus, Plus, X } from 'lucide-react'
+import { useId, useRef, useState } from 'react'
+import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react'
+import { Check, Plus, X } from 'lucide-react'
 import { faq, fit, problem, process, projects, services } from '../content.js'
-import { Reveal, Section, SectionHead } from '../components/ui.jsx'
+import { Reveal, Section, SectionHead, trackPointer } from '../components/ui.jsx'
 
 const EASE_OUT = [0.23, 1, 0.32, 1]
 
@@ -12,7 +12,7 @@ export function Problem() {
       <SectionHead {...problem} />
       <div className="mt-12 grid gap-4 md:grid-cols-3">
         {problem.points.map((p, i) => (
-          <Reveal key={p.title} delay={i * 0.06} className="rounded-3xl border border-alice/10 bg-prussian/40 p-6">
+          <Reveal key={p.title} delay={i * 0.06} className="spotlight rounded-3xl border border-alice/10 bg-prussian/40 p-6 transition-colors duration-200" onPointerMove={trackPointer}>
             <p className="font-mono text-xs text-alice/35">0{i + 1}</p>
             <h3 className="mt-6 text-lg font-semibold">{p.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-alice/60">{p.text}</p>
@@ -29,7 +29,7 @@ export function Services() {
       <SectionHead {...services} />
       <ol className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {services.items.map((s, i) => (
-          <Reveal as="li" key={s.name} delay={i * 0.06} className="group relative flex flex-col overflow-hidden rounded-3xl border border-alice/10 bg-prussian/40 p-6 transition-colors duration-200 hover:border-nyx/50">
+          <Reveal as="li" key={s.name} delay={i * 0.06} className="spotlight flex flex-col overflow-hidden rounded-3xl border border-alice/10 bg-prussian/40 p-6 transition-colors duration-200" onPointerMove={trackPointer}>
             <span className="w-fit rounded-full bg-nyx/15 px-2.5 py-1 text-xs font-medium text-nyx-light">{s.tag}</span>
             <h3 className="mt-8 text-xl font-semibold tracking-[-0.02em]">{s.name}</h3>
             <p className="mt-2 text-sm leading-relaxed text-alice/60">{s.text}</p>
@@ -49,7 +49,7 @@ export function Projects() {
         <SectionHead {...projects} />
         <div className="mt-12 grid gap-4 lg:grid-cols-3">
           {projects.items.map((p, i) => (
-            <Reveal as="article" key={p.name} delay={i * 0.06} className="flex flex-col overflow-hidden rounded-3xl border border-alice/10 bg-night/70 p-6 backdrop-blur-sm">
+            <Reveal as="article" key={p.name} delay={i * 0.06} className="spotlight flex flex-col overflow-hidden rounded-3xl border border-alice/10 bg-night/70 p-6 backdrop-blur-sm transition-colors duration-200" onPointerMove={trackPointer}>
               {p.image && (
                 <figure className="-mx-6 -mt-6 mb-6 aspect-[4/3] overflow-hidden border-b border-alice/10">
                   <img src={p.image.src} alt={p.image.alt} loading="lazy" decoding="async" width="1000" height="1333" className="h-full w-full object-cover object-[50%_45%]" />
@@ -76,10 +76,18 @@ export function Projects() {
 }
 
 export function Process() {
+  // Barra no topo da lista que enche conforme a seção passa pela tela (mostra o caminho de 1 a 4).
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 60%'] })
+  const fill = useTransform(scrollYProgress, (v) => `scaleX(${v})`)
   return (
     <Section id="como-funciona">
       <SectionHead {...process} />
-      <ol className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-alice/10 bg-alice/10 md:grid-cols-4">
+      <div ref={ref} className="relative mt-12">
+        <div className="absolute inset-x-6 top-0 z-10 h-0.5 overflow-hidden rounded-full bg-alice/5" aria-hidden="true">
+          <motion.div className="h-full origin-left bg-gradient-to-r from-nyx to-nyx-light" style={{ transform: fill }} />
+        </div>
+      <ol className="grid gap-px overflow-hidden rounded-3xl border border-alice/10 bg-alice/10 md:grid-cols-4">
         {process.steps.map((s, i) => (
           <Reveal as="li" key={s.title} delay={i * 0.06} className="bg-night p-6 sm:p-7">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-nyx text-sm font-bold">{i + 1}</span>
@@ -88,6 +96,7 @@ export function Process() {
           </Reveal>
         ))}
       </ol>
+      </div>
     </Section>
   )
 }
@@ -141,7 +150,7 @@ export function Faq() {
                   >
                     {item.q}
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-alice/15 text-alice/70">
-                      {isOpen ? <Minus size={16} aria-hidden="true" /> : <Plus size={16} aria-hidden="true" />}
+                      <Plus size={16} aria-hidden="true" className={`transition-transform duration-200 ease-out ${isOpen ? 'rotate-45' : ''}`} />
                     </span>
                   </button>
                 </h3>
