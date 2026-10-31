@@ -47,7 +47,7 @@ export function Projects() {
       <div className="glow-bottom pointer-events-none absolute inset-x-0 bottom-0 h-2/3 opacity-60" aria-hidden="true" />
       <div className="relative">
         <SectionHead {...projects} />
-        <div className="mt-12 grid gap-4 lg:grid-cols-3">
+        <div className="mt-12 grid gap-4 md:grid-cols-2">
           {projects.items.map((p, i) => (
             <Reveal as="article" key={p.name} delay={i * 0.06} className="spotlight flex flex-col overflow-hidden rounded-3xl border border-alice/10 bg-night/70 p-6 backdrop-blur-sm transition-colors duration-200" onPointerMove={trackPointer}>
               {p.image && (

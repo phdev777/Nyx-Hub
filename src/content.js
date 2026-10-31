@@ -10,6 +10,7 @@ export const contato = {
 export const nav = [
   { href: '#servicos', label: 'Serviços' },
   { href: '#projetos', label: 'Projetos' },
+  { href: '#por-dentro', label: 'Por dentro' },
   { href: '#como-funciona', label: 'Como funciona' },
   { href: '#perguntas', label: 'Perguntas' },
 ]
@@ -68,24 +69,31 @@ export const services = {
 export const projects = {
   index: '03',
   label: 'Já em produção',
-  title: 'O que já está rodando.',
-  text: 'Projetos reais, em uso todos os dias. Clientes identificados só com autorização.',
+  title: 'Projetos que já entregamos.',
+  text: 'Sistemas feitos pela nossa equipe e em uso todos os dias. Clientes identificados só com autorização.',
   items: [
     {
-      kind: 'Sistema interno',
-      name: 'Operação de mineradora',
+      kind: 'Sistema de gestão',
+      name: 'Gestão de mineradora',
       problem: 'Diárias de máquinas no papel e relatórios montados à mão no fim do mês.',
-      solution: 'Diária digital no tablet da frota, painel do gestor, metas, pessoas, permissões por unidade e manutenção preventiva.',
-      facts: ['Tablet em campo', 'Permissão por cargo', 'Relatórios diários'],
+      solution: 'Diária digital no tablet da frota, painel de produção, metas, pessoas, permissões por unidade e manutenção preventiva.',
+      facts: ['Tablet em campo', 'Painel de produção', 'Manutenção preventiva'],
       // A CONFIRMAR: autorização da empresa e das pessoas que aparecem na foto.
       image: { src: '/projetos/mineradora-tablet-2.jpg', alt: 'Operador registrando a diária no tablet fixado na parede da cabine da usina' },
     },
     {
-      kind: 'Sistema interno',
-      name: 'Gestão de diárias e eventos',
-      problem: 'Escalas, eventos e produção controlados em planilhas separadas.',
-      solution: 'Sistema único para diárias, eventos e produção, com histórico e consulta por perfil.',
-      facts: ['Um lugar só', 'Histórico completo', 'Acesso por perfil'],
+      kind: 'Sistema de gestão',
+      name: 'Gestão de usina de calcário',
+      problem: 'Apontamentos por turno, eventos e produção espalhados em planilhas.',
+      solution: 'Apontamento do operador por turno, eventos, produção, relatórios e a usina inteira em 3D, com o material correndo pelas correias.',
+      facts: ['Planta 3D', 'Apontamento por turno', 'Relatórios'],
+    },
+    {
+      kind: 'Portal',
+      name: 'Central de operações de um grupo',
+      problem: 'Cada empresa do grupo com um sistema e um login diferentes.',
+      solution: 'Um portal só, com login único, onde cada pessoa entra nas operações que o perfil dela permite.',
+      facts: ['Login único', 'Várias empresas', 'Acesso por perfil'],
     },
     {
       kind: 'Site',
@@ -97,8 +105,15 @@ export const projects = {
   ],
 }
 
-export const process = {
+export const showcase = {
   index: '04',
+  label: 'Por dentro',
+  title: 'Por dentro do que já entregamos.',
+  text: 'Telas dos sistemas que construímos e que estão em uso hoje: produção, manutenção, central de operações, diárias e até a usina em 3D. Para proteger nossos clientes, nomes e números aqui são fictícios.',
+}
+
+export const process = {
+  index: '05',
   label: 'Como funciona',
   title: 'Quatro passos, sem enrolação.',
   steps: [
@@ -110,7 +125,7 @@ export const process = {
 }
 
 export const fit = {
-  index: '05',
+  index: '06',
   label: 'Pra quem é',
   title: 'Somos uma boa escolha se…',
   yes: [
@@ -127,7 +142,7 @@ export const fit = {
 }
 
 export const faq = {
-  index: '06',
+  index: '07',
   label: 'Perguntas',
   title: 'Perguntas frequentes.',
   items: [

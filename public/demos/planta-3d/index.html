@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#081322">
+  <title>Nyx Hub · Planta 3D (demonstração)</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23081322'/%3E%3Cpath d='M10 25V15h12M25 10v18m-9-9h18' stroke='%237adeee' stroke-width='4' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./viewer.css">
+  <link rel="stylesheet" href="./embed.css">
+</head>
+<body>
+<!-- PREVIEW_START -->
+<section id="cal-plant" aria-label="Demonstração animada de uma usina de britagem e moagem">
+  <header class="plant-toolbar">
+    <div class="plant-identity"><strong>NYX<span>·</span></strong><span class="plant-name">Planta em movimento</span></div>
+    <nav class="plant-views" aria-label="Vista da planta">
+      <button type="button" data-view="all" aria-pressed="true">Geral</button>
+      <button type="button" data-view="crushing" aria-pressed="false">Britagem</button>
+      <button type="button" data-view="milling" aria-pressed="false">Moagem</button>
+    </nav>
+    <span class="plant-preview">PRÉVIA 3D</span>
+  </header>
+  <div class="plant-viewport">
+    <canvas class="plant-canvas" role="img" aria-label="Usina tridimensional com britagem, correias transportadoras, pilha pulmão e moagem. Arraste para girar e use a roda do mouse para aproximar.">Cena tridimensional de uma usina de demonstração.</canvas>
+    <div class="plant-labels" aria-label="Equipamentos da planta"></div>
+    <aside class="equipment-popover" aria-live="polite" hidden>
+      <button type="button" class="equipment-popover-close" aria-label="Fechar detalhes do equipamento">&times;</button>
+      <div class="equipment-popover-heading">
+        <span class="equipment-popover-status-dot" aria-hidden="true"></span>
+        <div><strong class="equipment-popover-tag"></strong><span class="equipment-popover-name"></span></div>
+      </div>
+      <span class="equipment-popover-status"></span>
+      <button type="button" class="equipment-popover-event">Registrar evento</button>
+    </aside>
+    <div class="plant-loading" role="status">Preparando a planta…</div>
+    <div class="plant-corner"><span class="plant-kicker">DEMONSTRAÇÃO</span><h1>Britagem e moagem</h1></div>
+    <div class="plant-selection" role="status" aria-live="polite" hidden></div>
+    <div class="plant-legend"><span class="material-key"></span>Material em movimento</div>
+  </div>
+  <footer class="plant-controls">
+    <div class="plant-actions">
+      <button type="button" class="plant-pause" aria-pressed="false">Pausar</button>
+      <label class="plant-label-toggle"><input type="checkbox" checked> Identificações</label>
+      <label class="plant-inspect"><span class="plant-sr-only">Aproximar equipamento</span><select aria-label="Aproximar equipamento"><option value="">Explorar equipamento</option></select></label>
+    </div>
+    <span class="plant-gesture">Arraste para girar · Role para aproximar</span>
+  </footer>
+  <div class="plant-caption"><span>Usina fictícia, criada para demonstração.</span><span>Animação ilustrativa · dados fictícios</span></div>
+</section>
+<!-- PREVIEW_END -->
+<script type="module" src="./viewer.mjs"></script>
+</body>
+</html>

@@ -2,6 +2,7 @@ import { MotionConfig } from 'motion/react'
 import { Header, Hero, StackStrip } from './sections/Top.jsx'
 import { Faq, Fit, Problem, Process, Projects, Services } from './sections/Body.jsx'
 import { Contact, Footer } from './sections/Bottom.jsx'
+import { Showcase } from './sections/Showcase.jsx'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Problem />
         <Services />
         <Projects />
+        <Showcase />
         <Process />
         <Fit />
         <Faq />

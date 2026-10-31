@@ -1,0 +1,21 @@
+html:has(body.embedded),body.embedded{height:100%;min-height:0;padding:0;overflow:hidden}
+.embedded #cal-plant{height:100%;max-width:none;border:0;border-radius:0}
+.embedded #cal-plant .plant-toolbar,.embedded #cal-plant .plant-controls,.embedded #cal-plant .plant-caption,.embedded #cal-plant .plant-corner,.embedded #cal-plant .plant-selection,.embedded #cal-plant .plant-legend{display:none!important}
+.embedded #cal-plant .plant-viewport{height:100%}
+.embedded #cal-plant button.equipment-label{pointer-events:auto;min-height:0;padding:4px 7px 4px 23px;border-radius:4px;border:1px solid #66839b;background:#092033eb;font-size:10px;line-height:1.3;--equipment-status:#91a7bf}
+.embedded #cal-plant button.equipment-label:before{position:absolute;top:6px;left:7px;width:9px;height:9px;border:0;border-radius:50%;background:var(--equipment-status)}
+.embedded #cal-plant button.equipment-label.is-selected{outline:1px solid #00c9ff;border-color:#00c9ff;background:#043a52;box-shadow:0 0 14px #00b8ed35}
+.embedded #cal-plant button.equipment-label:hover{background:#164056}
+.embedded #cal-plant .equipment-popover{position:absolute;top:0;left:0;z-index:6;padding:11px 11px 10px 14px;border:1px solid #315369;border-left:3px solid var(--equipment-status);border-radius:7px;background:#0a1f30f2;box-shadow:0 12px 28px #020a1199;color:#dceaf4;pointer-events:auto;backdrop-filter:blur(10px);--equipment-status:#91a7bf}
+.embedded #cal-plant .equipment-popover[hidden]{display:none}
+.embedded #cal-plant .equipment-popover-heading{display:flex;align-items:center;gap:8px;padding-right:22px}
+.embedded #cal-plant .equipment-popover-heading>div{display:flex;align-items:baseline;gap:7px;min-width:0}
+.embedded #cal-plant .equipment-popover-tag{font-size:12px;letter-spacing:.35px;color:#f3f8fb}
+.embedded #cal-plant .equipment-popover-name{overflow:hidden;color:#8fa9bc;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+.embedded #cal-plant .equipment-popover-status-dot{width:8px;height:8px;flex:0 0 auto;border-radius:50%;background:var(--equipment-status);box-shadow:0 0 8px color-mix(in srgb,var(--equipment-status) 55%,transparent)}
+.embedded #cal-plant .equipment-popover-status{display:block;margin:7px 0 9px 16px;color:#a9bfce;font-size:10px}
+.embedded #cal-plant button.equipment-popover-close{position:absolute;top:5px;right:6px;min-height:24px;width:24px;padding:0;border:0;background:transparent;color:#7792a6;font-size:17px;line-height:1}
+.embedded #cal-plant button.equipment-popover-close:hover{background:#16364a;color:#fff}
+.embedded #cal-plant button.equipment-popover-event{width:100%;min-height:29px;padding:5px 9px;border:1px solid #2e708c;border-radius:4px;background:#123b51;color:#bfeefe;font-size:10px;font-weight:650;letter-spacing:.15px}
+.embedded #cal-plant button.equipment-popover-event:hover{background:#18516d;color:#fff}
+@media(max-width:520px){.embedded #cal-plant .equipment-popover{padding:9px 9px 8px 11px}.embedded #cal-plant .equipment-popover-status{margin-bottom:7px}}
