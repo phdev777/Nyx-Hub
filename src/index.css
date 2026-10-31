@@ -18,6 +18,15 @@
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
     -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  a, button, summary, [role="tab"] {
+    touch-action: manipulation;
+  }
+  button, [role="tab"] {
+    -webkit-user-select: none;
+    user-select: none;
   }
   body {
     @apply bg-night text-alice font-sans antialiased;
@@ -35,6 +44,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  /* O MotionConfig "user" não cobre transform em texto: aqui as entradas ficam só com o fade.
+     Barras de dado (data-bar) mantêm o transform, porque ele mostra o valor. */
+  [style*="transform"]:not([data-bar]) { transform: none !important; }
 }
 
 /* Faixa de tecnologias: anima em CSS (fora da thread principal) e pausa no hover/foco. */
@@ -45,10 +57,12 @@
 .marquee-track {
   animation: marquee 38s linear infinite;
 }
-.marquee:hover .marquee-track,
 .marquee:focus-within .marquee-track,
 .marquee[data-paused="true"] .marquee-track {
   animation-play-state: paused;
+}
+@media (hover: hover) and (pointer: fine) {
+  .marquee:hover .marquee-track { animation-play-state: paused; }
 }
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }

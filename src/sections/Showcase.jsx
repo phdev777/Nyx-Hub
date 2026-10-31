@@ -20,12 +20,18 @@ export function Showcase() {
   const base = useId()
   const tab = TABS.find((t) => t.id === active)
 
+  // Na faixa de abas que rola no celular, a aba escolhida vem para a vista.
+  function choose(id) {
+    setActive(id)
+    document.getElementById(`${base}-tab-${id}`)?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
+  }
+
   function onKey(e) {
     const i = TABS.findIndex((t) => t.id === active)
     const next = e.key === 'ArrowRight' ? (i + 1) % TABS.length : e.key === 'ArrowLeft' ? (i - 1 + TABS.length) % TABS.length : null
     if (next === null) return
     e.preventDefault()
-    setActive(TABS[next].id)
+    choose(TABS[next].id)
     document.getElementById(`${base}-tab-${TABS[next].id}`)?.focus()
   }
 
@@ -33,7 +39,7 @@ export function Showcase() {
     <Section id="por-dentro">
       <SectionHead {...showcase} />
       <Reveal className="mt-10">
-        <div role="tablist" aria-label="Telas de exemplo" onKeyDown={onKey} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
+        <motion.div layoutScroll role="tablist" aria-label="Telas de exemplo" onKeyDown={onKey} className="-mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto overscroll-x-contain px-4 pb-2 [mask-image:linear-gradient(to_right,#000_85%,transparent)] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0 sm:[mask-image:none]">
           {TABS.map((t) => {
             const selected = t.id === active
             return (
@@ -45,8 +51,8 @@ export function Showcase() {
                 aria-selected={selected}
                 aria-controls={`${base}-panel`}
                 tabIndex={selected ? 0 : -1}
-                onClick={() => setActive(t.id)}
-                className={`relative inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors duration-200 ${selected ? 'text-alice' : 'text-alice/55 hover:text-alice/85'}`}
+                onClick={() => choose(t.id)}
+                className={`relative inline-flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full px-4 text-sm font-medium transition-[color,transform] duration-150 ease-out active:scale-[0.97] ${selected ? 'text-alice' : 'text-alice/65 hover:text-alice/90'}`}
               >
                 {/* A pílula azul desliza até a aba escolhida. */}
                 {selected && <motion.span layoutId="showcase-pill" className="absolute inset-0 rounded-full bg-nyx" transition={{ type: 'spring', duration: 0.45, bounce: 0.15 }} />}
@@ -55,14 +61,14 @@ export function Showcase() {
               </button>
             )
           })}
-        </div>
+        </motion.div>
 
-        <div id={`${base}-panel`} role="tabpanel" aria-labelledby={`${base}-tab-${active}`} className="mt-5 overflow-hidden rounded-3xl border border-alice/10 bg-prussian/50 shadow-[0_40px_120px_-50px_rgb(24_93_241/0.55)]">
+        <div id={`${base}-panel`} tabIndex={0} role="tabpanel" aria-labelledby={`${base}-tab-${active}`} className="mt-5 overflow-hidden rounded-3xl border border-alice/10 bg-prussian/50 shadow-[0_40px_120px_-50px_rgb(24_93_241/0.55)]">
           <div className="flex items-center justify-between gap-3 border-b border-alice/10 px-4 py-3 sm:px-5">
             <div className="flex items-center gap-1.5" aria-hidden="true">
               <span className="h-2.5 w-2.5 rounded-full bg-alice/15" /><span className="h-2.5 w-2.5 rounded-full bg-alice/15" /><span className="h-2.5 w-2.5 rounded-full bg-alice/15" />
             </div>
-            <p className="truncate text-xs text-alice/45">Projeto entregue: <span className="text-alice/75">{tab.from}</span></p>
+            <p className="min-w-0 truncate text-xs text-alice/60" title={`Projeto entregue: ${tab.from}`}><span className="hidden sm:inline">Projeto entregue: </span><span className="text-alice/80">{tab.from}</span></p>
             <span className="shrink-0 rounded-full bg-amber-400/10 px-2.5 py-1 text-[0.7rem] font-medium text-amber-300">Dados fictícios</span>
           </div>
           <AnimatePresence mode="wait" initial={false}>
@@ -70,7 +76,7 @@ export function Showcase() {
               key={active}
               initial={{ opacity: 0, transform: 'translateY(8px)' }}
               animate={{ opacity: 1, transform: 'translateY(0px)' }}
-              exit={{ opacity: 0, transform: 'translateY(-4px)' }}
+              exit={{ opacity: 0, transform: 'translateY(-4px)', transition: { duration: 0.1 } }}
               transition={{ duration: 0.22, ease: EASE_OUT }}
               className="p-4 sm:p-6"
             >
@@ -88,31 +94,32 @@ export function Showcase() {
 function Card({ title, children, className = '' }) {
   return (
     <div className={`rounded-2xl border border-alice/5 bg-night/60 p-4 ${className}`}>
-      {title && <h4 className="mb-3 text-xs font-medium uppercase tracking-[0.12em] text-alice/45">{title}</h4>}
+      {title && <h3 className="mb-3 text-xs font-medium uppercase tracking-[0.12em] text-alice/60">{title}</h3>}
       {children}
     </div>
   )
 }
 
 function Kpi({ label, value, note, tone = 'neutral' }) {
-  const toneClass = tone === 'up' ? 'text-emerald-300' : tone === 'down' ? 'text-rose-300' : 'text-alice/45'
+  const toneClass = tone === 'up' ? 'text-emerald-300' : tone === 'down' ? 'text-rose-300' : 'text-alice/60'
   return (
     <Card>
-      <p className="text-xs text-alice/50">{label}</p>
-      <p className="mt-2 text-2xl font-bold tracking-[-0.03em] tabular-nums">{value}</p>
+      <p className="text-xs text-alice/60">{label}</p>
+      <p className="mt-2 whitespace-nowrap text-xl font-bold tracking-[-0.03em] tabular-nums min-[360px]:text-2xl">{value}</p>
       <p className={`mt-1 text-xs ${toneClass}`}>{note}</p>
     </Card>
   )
 }
 
-// Barra que cresce a partir da base quando aparece na tela.
+// Barra que sobe de dentro da base quando aparece na tela (translate, sem achatar a ponta arredondada).
 function GrowBar({ value, max, delay = 0, className = '' }) {
   return (
     <motion.div
-      className={`w-full origin-bottom rounded-t-md ${className}`}
+      data-bar
+      className={`w-full rounded-t-md ${className}`}
       style={{ height: `${(value / max) * 100}%` }}
-      initial={{ transform: 'scaleY(0)' }}
-      whileInView={{ transform: 'scaleY(1)' }}
+      initial={{ transform: 'translateY(100%)' }}
+      whileInView={{ transform: 'translateY(0%)' }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, ease: EASE_OUT, delay }}
     />
@@ -123,10 +130,11 @@ function FillBar({ value, delay = 0, className = 'bg-nyx' }) {
   return (
     <div className="h-2 overflow-hidden rounded-full bg-alice/5">
       <motion.div
-        className={`h-full origin-left rounded-full ${className}`}
+        data-bar
+        className={`h-full rounded-full ${className}`}
         style={{ width: `${Math.min(value, 100)}%` }}
-        initial={{ transform: 'scaleX(0)' }}
-        whileInView={{ transform: 'scaleX(1)' }}
+        initial={{ transform: 'translateX(-100%)' }}
+        whileInView={{ transform: 'translateX(0%)' }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: EASE_OUT, delay }}
       />
@@ -149,6 +157,7 @@ const LINHA = [
   { tag: 'BR-01', blocos: [['op', 30], ['par', 18], ['op', 52]] },
 ]
 const COR = { op: 'bg-nyx', par: 'bg-rose-400/80', sb: 'bg-amber-300/70' }
+const NOME = { op: 'Operando', par: 'Parado', sb: 'Aguardando' }
 
 function ProductionScreen() {
   const max = Math.max(...PRODUCAO_HORA)
@@ -165,16 +174,16 @@ function ProductionScreen() {
         <Card title="Produção por hora (t)">
           <div className="flex h-40 items-end gap-1.5 sm:gap-2" role="img" aria-label="Gráfico de barras com a produção de cada hora do turno, entre 40 e 136 toneladas">
             {PRODUCAO_HORA.map((v, i) => (
-              <div key={i} className="flex h-full flex-1 items-end"><GrowBar value={v} max={max} delay={i * 0.03} className={v < 60 ? 'bg-rose-400/70' : 'bg-gradient-to-t from-nyx to-nyx-light'} /></div>
+              <div key={i} className="flex h-full flex-1 items-end overflow-hidden"><GrowBar value={v} max={max} delay={i * 0.03} className={v < 60 ? 'bg-rose-400/70' : 'bg-gradient-to-t from-nyx to-nyx-light'} /></div>
             ))}
           </div>
-          <div className="mt-2 flex justify-between text-[0.65rem] text-alice/35"><span>07h</span><span>13h</span><span>18h</span></div>
+          <div className="mt-2 flex justify-between text-[0.65rem] text-alice/60" aria-hidden="true"><span>07h</span><span>13h</span><span>18h</span></div>
         </Card>
         <Card title="Tempo parado por motivo">
           <ul className="space-y-3">
             {PARADAS.map((p, i) => (
               <li key={p.grupo}>
-                <div className="mb-1.5 flex justify-between text-xs"><span className="text-alice/75">{p.grupo}</span><span className="tabular-nums text-alice/45">{p.min} min</span></div>
+                <div className="mb-1.5 flex justify-between text-xs"><span className="text-alice/75">{p.grupo}</span><span className="tabular-nums text-alice/60">{p.min} min</span></div>
                 <FillBar value={(p.min / maxParada) * 100} delay={i * 0.05} className="bg-rose-400/70" />
               </li>
             ))}
@@ -186,7 +195,7 @@ function ProductionScreen() {
           {LINHA.map((m, r) => (
             <li key={m.tag} className="flex items-center gap-3">
               <span className="w-14 shrink-0 font-mono text-xs text-alice/60">{m.tag}</span>
-              <div className="flex h-3 flex-1 gap-0.5 overflow-hidden rounded-full">
+              <div className="flex h-3 flex-1 gap-0.5 overflow-hidden rounded-full" role="img" aria-label={m.blocos.map(([tipo, pct]) => `${NOME[tipo]} ${pct}%`).join(', ')}>
                 {m.blocos.map(([tipo, pct], i) => (
                   <motion.span key={i} className={`h-full origin-left ${COR[tipo]}`} style={{ width: `${pct}%` }}
                     initial={{ opacity: 0, transform: 'scaleX(0.6)' }} whileInView={{ opacity: 1, transform: 'scaleX(1)' }} viewport={{ once: true }}
@@ -196,7 +205,7 @@ function ProductionScreen() {
             </li>
           ))}
         </ul>
-        <div className="mt-3 flex flex-wrap gap-4 text-[0.7rem] text-alice/50">
+        <div className="mt-3 flex flex-wrap gap-4 text-[0.7rem] text-alice/60" aria-hidden="true">
           <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-nyx" />Operando</span>
           <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-300/70" />Aguardando</span>
           <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-rose-400/80" />Parado</span>
@@ -226,11 +235,11 @@ function MaintenanceScreen() {
             const [rotulo, chip, barra] = situacao(e.uso)
             return (
               <li key={e.tag} className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 py-3 sm:grid-cols-[11rem_1fr_auto]">
-                <div className="min-w-0"><p className="font-mono text-xs text-alice/50">{e.tag}</p><p className="truncate text-sm">{e.nome}</p></div>
+                <div className="min-w-0"><p className="font-mono text-xs text-alice/60">{e.tag}</p><p className="truncate text-sm">{e.nome}</p></div>
                 <span className={`justify-self-end rounded-full px-2.5 py-1 text-xs font-medium sm:order-last ${chip}`}>{rotulo}</span>
                 <div className="col-span-2 sm:col-span-1">
                   <FillBar value={e.uso} delay={i * 0.05} className={barra} />
-                  <p className="mt-1 text-[0.7rem] text-alice/45">{e.falta}</p>
+                  <p className="mt-1 text-[0.7rem] text-alice/60">{e.falta}</p>
                 </div>
               </li>
             )
@@ -242,7 +251,7 @@ function MaintenanceScreen() {
         <Kpi label="Vencidas" value="1" note="PC-02 · pá carregadeira" tone="down" />
         <Card title="Último registro">
           <p className="text-sm text-alice/80">Troca de óleo e filtros · ESC-01</p>
-          <p className="mt-1 text-xs text-alice/45">Horímetro 4.512 h · hoje, 09:40</p>
+          <p className="mt-1 text-xs text-alice/60">Horímetro 4.512 h · hoje, 09:40</p>
         </Card>
       </div>
     </div>
@@ -257,7 +266,7 @@ const UNIDADES = [
   { nome: 'Usina Pedra Branca', tipo: 'Calcário', info: 'Implantação em andamento', status: 'Em implantação', tone: 'wait' },
   { nome: 'Escritório central', tipo: 'Administrativo', info: 'Pessoas, acessos e relatórios', status: 'Em operação', tone: 'ok' },
 ]
-const PERFIS = ['Diretoria', 'Gestor', 'Encarregado', 'Operador']
+const PERFIS = [['Diretoria', 'Dir.'], ['Gestor', 'Gest.'], ['Encarregado', 'Enc.'], ['Operador', 'Op.']]
 const PERMISSOES = [
   ['Ver relatórios', [1, 1, 1, 0]],
   ['Registrar diária', [0, 1, 1, 1]],
@@ -277,7 +286,7 @@ function CentralScreen() {
                 <span className={`rounded-full px-2 py-0.5 text-[0.68rem] font-medium ${u.tone === 'ok' ? 'bg-emerald-400/10 text-emerald-300' : 'bg-amber-300/15 text-amber-300'}`}>{u.status}</span>
               </div>
               <p className="mt-4 font-semibold">{u.nome}</p>
-              <p className="text-xs text-alice/50">{u.tipo}</p>
+              <p className="text-xs text-alice/60">{u.tipo}</p>
               <p className="mt-3 text-xs text-alice/65">{u.info}</p>
             </Card>
           </motion.div>
@@ -286,20 +295,20 @@ function CentralScreen() {
       <Card title="Quem pode o quê">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead><tr><th className="pb-2 font-normal text-alice/40"><span className="sr-only">Permissão</span></th>{PERFIS.map((p) => <th key={p} className="pb-2 text-center font-medium text-alice/60">{p}</th>)}</tr></thead>
+            <thead><tr><th className="sticky left-0 bg-[#020812] pb-2 font-normal"><span className="sr-only">Permissão</span></th>{PERFIS.map(([nome, curto]) => <th key={nome} scope="col" className="px-1 pb-2 text-center font-medium text-alice/70"><abbr title={nome} className="no-underline sm:hidden">{curto}</abbr><span className="hidden sm:inline">{nome}</span></th>)}</tr></thead>
             <tbody>
               {PERMISSOES.map(([nome, flags]) => (
                 <tr key={nome} className="border-t border-alice/5">
-                  <td className="py-2.5 pr-2 text-alice/75">{nome}</td>
+                  <th scope="row" className="sticky left-0 bg-[#020812] py-2.5 pr-2 font-normal text-alice/80">{nome}</th>
                   {flags.map((f, i) => (
-                    <td key={i} className="text-center">{f ? <Check size={15} className="mx-auto text-nyx-light" aria-label="sim" /> : <span className="text-alice/20" aria-label="não">—</span>}</td>
+                    <td key={i} className="text-center">{f ? <Check size={15} className="mx-auto text-nyx-light" aria-hidden="true" /> : <span className="text-alice/30" aria-hidden="true">—</span>}<span className="sr-only">{f ? 'sim' : 'não'}</span></td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-[0.7rem] text-alice/40">A regra fica no banco de dados: a tela só mostra o que o perfil permite.</p>
+        <p className="mt-3 text-[0.7rem] text-alice/60">A regra vale no sistema inteiro: a tela só mostra o que o perfil permite.</p>
       </Card>
     </div>
   )
@@ -327,7 +336,7 @@ function ShiftScreen() {
           {EVENTOS.map((e, i) => (
             <motion.li key={i} className="relative" initial={{ opacity: 0, transform: 'translateX(-6px)' }} whileInView={{ opacity: 1, transform: 'translateX(0px)' }} viewport={{ once: true }} transition={{ duration: 0.35, ease: EASE_OUT, delay: i * 0.05 }}>
               <span className={`absolute -left-5 top-1.5 h-[11px] w-[11px] rounded-full border-2 border-night ${DOT[e.tipo]}`} aria-hidden="true" />
-              <p className="text-xs text-alice/45"><span className="tabular-nums">{e.hora}</span> · <span className="font-mono">{e.tag}</span></p>
+              <p className="text-xs text-alice/60"><span className="tabular-nums">{e.hora}</span> · <span className="font-mono">{e.tag}</span></p>
               <p className="text-sm text-alice/85">{e.texto}</p>
             </motion.li>
           ))}
@@ -342,7 +351,7 @@ function ShiftScreen() {
                 initial={{ strokeDashoffset: C }} whileInView={{ strokeDashoffset: C * (1 - feitos / total) }} viewport={{ once: true }} transition={{ duration: 1, ease: EASE_OUT }} />
               <defs><linearGradient id="nyx-ring"><stop offset="0" stopColor="#185df1" /><stop offset="1" stopColor="#6e9bff" /></linearGradient></defs>
             </svg>
-            <div><p className="text-2xl font-bold tabular-nums">{feitos}/{total}</p><p className="text-xs text-alice/50">enviadas até agora</p></div>
+            <div><p className="text-2xl font-bold tabular-nums">{feitos}/{total}</p><p className="text-xs text-alice/60">enviadas até agora</p></div>
           </div>
         </Card>
         <Kpi label="Diesel no dia" value="2.940 L" note="16,3 L/h na média" />
@@ -354,18 +363,23 @@ function ShiftScreen() {
 
 /* ---------- 5. Planta 3D ---------- */
 
+const PLANTA = '/demos/planta-3d/index.html'
+const PLANTA_EMBED = `${PLANTA}?embed=1`
+
 function PlantScreen() {
   // A cena 3D pesa ~1 MB: só carrega quando a pessoa pede.
   const [load, setLoad] = useState(false)
   return (
-    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-alice/5 bg-night sm:aspect-[16/9]">
+    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-alice/5 bg-night sm:aspect-[16/10]">
       {load ? (
-        <iframe src="/demos/planta-3d/index.html" title="Planta 3D interativa de uma usina de demonstração" className="h-full w-full border-0" loading="lazy" />
+        <iframe src={PLANTA_EMBED} title="Planta 3D interativa de uma usina de demonstração" className="h-full w-full border-0" loading="lazy" />
       ) : (
         <div className="grid-lines absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
           <Box size={36} className="text-nyx-light" aria-hidden="true" />
           <p className="max-w-sm text-sm text-alice/70">Usina de britagem e moagem em 3D: o material corre pelas correias, e dá para girar, aproximar e clicar nos equipamentos.</p>
-          <button type="button" onClick={() => setLoad(true)} className="inline-flex min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold transition-[background-color,transform] duration-150 ease-out hover:bg-[#2a6bff] active:scale-[0.97]">Abrir planta 3D</button>
+          {/* No celular, a cena dentro da página prende o dedo e atrapalha a rolagem: abre em outra aba, em tela cheia. */}
+          <a href={PLANTA} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] sm:hidden">Abrir planta 3D<span className="sr-only"> em outra aba</span></a>
+          <button type="button" onClick={() => setLoad(true)} className="hidden min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold transition-[background-color,transform] duration-150 ease-out hover:bg-[#1450d6] active:scale-[0.97] sm:inline-flex">Abrir planta 3D</button>
         </div>
       )}
     </div>

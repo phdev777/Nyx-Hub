@@ -49,10 +49,15 @@ export function whatsappHref(message = 'Olá! Quero conversar sobre um projeto c
   return `https://wa.me/${contato.whatsapp}?text=${encodeURIComponent(message)}`
 }
 
+// Rótulo do botão de contato: diz para onde a pessoa vai antes de tocar.
+export function contactLabel() {
+  return contato.whatsapp ? 'Falar no WhatsApp' : 'Falar com a gente'
+}
+
 export function Button({ href, variant = 'primary', children, className = '', ...rest }) {
   const external = href?.startsWith('http')
   const styles = variant === 'primary'
-    ? 'bg-nyx text-alice shadow-[0_8px_30px_-8px_rgb(24_93_241/0.7)] hover:bg-[#2a6bff]'
+    ? 'bg-nyx text-alice shadow-[0_8px_30px_-8px_rgb(24_93_241/0.7)] hover:bg-[#1450d6]'
     : 'border border-alice/15 text-alice hover:border-alice/35 hover:bg-alice/5'
   return (
     <a
@@ -71,7 +76,7 @@ export function SectionHead({ index, label, title, text, align = 'left' }) {
   return (
     <Reveal className={align === 'center' ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
       <p className="font-mono text-xs uppercase tracking-[0.18em] text-nyx-light">
-        {index} <span className="text-alice/30">/</span> {label}
+        {index} <span className="text-alice/40" aria-hidden="true">/</span> {label}
       </p>
       <h2 className="mt-4 text-balance text-3xl font-bold tracking-[-0.03em] sm:text-[2.6rem] sm:leading-[1.08]">{title}</h2>
       {text && <p className="mt-4 text-pretty text-base leading-relaxed text-alice/65 sm:text-lg">{text}</p>}

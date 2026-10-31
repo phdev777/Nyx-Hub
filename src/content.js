@@ -18,8 +18,8 @@ export const nav = [
 export const hero = {
   eyebrow: 'Software sob demanda',
   title: ['Software do jeito', 'que a sua operação', 'funciona.'],
-  text: 'Sistemas, automações e sites feitos sob medida para empresas que cansaram de planilha, retrabalho e ferramenta que não conversa com o dia a dia.',
-  primary: 'Contar meu projeto',
+  text: 'A gente cria sistemas, automações e sites sob medida. Chega de planilha, retrabalho e ferramenta que não serve pro seu dia a dia.',
+  primary: 'Contar o que eu preciso',
   secondary: 'Ver projetos',
 }
 
@@ -30,9 +30,9 @@ export const demoPanel = {
     { label: 'Relatórios do turno recebidos', done: 'Recebidos', pending: 'Recebendo…' },
     { label: 'Pedidos conferidos com o estoque', done: 'Conferidos', pending: 'Conferindo…' },
     { label: 'Manutenções da semana agendadas', done: 'Agendadas', pending: 'Agendando…' },
-    { label: 'Fechamento enviado ao gestor', done: 'Enviado', pending: 'Montando…' },
+    { label: 'Fechamento enviado ao gestor', done: 'Enviado', pending: 'Enviando…' },
   ],
-  footer: 'Antes: planilha e WhatsApp. Agora: um painel só.',
+  footer: 'Tudo num painel só, em vez de planilha e WhatsApp.',
 }
 
 export const stack = [
@@ -68,9 +68,9 @@ export const services = {
 // A CONFIRMAR: quais projetos podem aparecer e se o cliente pode ser citado pelo nome.
 export const projects = {
   index: '03',
-  label: 'Já em produção',
-  title: 'Projetos que já entregamos.',
-  text: 'Sistemas feitos pela nossa equipe e em uso todos os dias. Clientes identificados só com autorização.',
+  label: 'Projetos',
+  title: 'O que a gente já entregou.',
+  text: 'Sistemas feitos pela nossa equipe. Clientes identificados só com autorização.',
   items: [
     {
       kind: 'Sistema de gestão',
@@ -78,6 +78,7 @@ export const projects = {
       problem: 'Diárias de máquinas no papel e relatórios montados à mão no fim do mês.',
       solution: 'Diária digital no tablet da frota, painel de produção, metas, pessoas, permissões por unidade e manutenção preventiva.',
       facts: ['Tablet em campo', 'Painel de produção', 'Manutenção preventiva'],
+      status: 'Em uso',
       // A CONFIRMAR: autorização da empresa e das pessoas que aparecem na foto.
       image: { src: '/projetos/mineradora-tablet-2.jpg', alt: 'Operador registrando a diária no tablet fixado na parede da cabine da usina' },
     },
@@ -87,6 +88,7 @@ export const projects = {
       problem: 'Apontamentos por turno, eventos e produção espalhados em planilhas.',
       solution: 'Apontamento do operador por turno, eventos, produção, relatórios e a usina inteira em 3D, com o material correndo pelas correias.',
       facts: ['Planta 3D', 'Apontamento por turno', 'Relatórios'],
+      status: 'Entregue',
     },
     {
       kind: 'Portal',
@@ -94,13 +96,15 @@ export const projects = {
       problem: 'Cada empresa do grupo com um sistema e um login diferentes.',
       solution: 'Um portal só, com login único, onde cada pessoa entra nas operações que o perfil dela permite.',
       facts: ['Login único', 'Várias empresas', 'Acesso por perfil'],
+      status: 'Em uso',
     },
     {
       kind: 'Site',
       name: 'Site profissional',
       problem: 'Profissional sem presença on-line para receber novos clientes.',
       solution: 'Site próprio, rápido no celular, com apresentação dos serviços e contato direto.',
-      facts: ['Feito para celular', 'Carrega rápido', 'Contato direto'],
+      facts: ['Feito para celular', 'Contato direto'],
+      status: 'Entregue',
     },
   ],
 }
@@ -108,8 +112,8 @@ export const projects = {
 export const showcase = {
   index: '04',
   label: 'Por dentro',
-  title: 'Por dentro do que já entregamos.',
-  text: 'Telas dos sistemas que construímos e que estão em uso hoje: produção, manutenção, central de operações, diárias e até a usina em 3D. Para proteger nossos clientes, nomes e números aqui são fictícios.',
+  title: 'Veja as telas por dentro.',
+  text: 'Nomes e números aqui são fictícios, para proteger nossos clientes. As telas são as dos sistemas que construímos: produção, manutenção, central de operações, diárias e até a usina em 3D.',
 }
 
 export const process = {
@@ -119,8 +123,8 @@ export const process = {
   steps: [
     { title: 'Conversa', text: 'Você conta o problema. A gente entende como a operação funciona hoje.' },
     { title: 'Proposta fechada', text: 'Escopo, prazo e preço definidos por escrito antes de começar.' },
-    { title: 'Construção', text: 'Entregas toda semana, para você ver e testar enquanto o sistema nasce.' },
-    { title: 'Entrega e suporte', text: 'Colocamos no ar, treinamos a equipe e seguimos junto depois.' },
+    { title: 'Construção', text: 'Entregas frequentes, para você ver e testar enquanto o sistema nasce.' },
+    { title: 'Entrega e suporte', text: 'Colocamos no ar, treinamos a equipe e o suporte fica combinado na proposta.' },
   ],
 }
 
@@ -136,7 +140,7 @@ export const fit = {
   ],
   no: [
     'Você procura o preço mais baixo, sem olhar a qualidade.',
-    'Precisa de tudo pronto amanhã, sem tempo para entender o processo.',
+    'Precisa de uma solução pronta, sem ajustar nada ao seu processo.',
     'Quer só um orçamento para comparar, sem intenção de fazer.',
   ],
 }
@@ -147,14 +151,26 @@ export const faq = {
   title: 'Perguntas frequentes.',
   items: [
     { q: 'Quanto custa um projeto?', a: 'Depende do tamanho. Depois da primeira conversa, enviamos uma proposta com escopo, prazo e preço fechados. Sem cobrança por hora.' },
-    { q: 'Quanto tempo leva?', a: 'Um site sai em 1 a 2 semanas. Sistemas levam de 4 a 8 semanas na primeira versão. O prazo exato vai na proposta.' },
-    { q: 'Funciona no celular e no tablet?', a: 'Sim. Tudo é pensado para celular desde o início, inclusive sistemas usados em campo.' },
-    { q: 'E depois que entrega?', a: 'Seguimos junto: corrigimos o que aparecer e evoluímos o sistema conforme a empresa cresce.' },
-    { q: 'Meus dados ficam seguros?', a: 'Cada pessoa vê só o que o cargo dela permite, e a regra fica no banco de dados, não só na tela.' },
+    { q: 'Quanto tempo leva?', a: 'Em geral, um site sai em 1 a 2 semanas. Sistemas levam de 4 a 8 semanas na primeira versão. O prazo exato vai na proposta.' },
+    { q: 'Funciona no celular e no tablet?', a: 'Sim. Pensamos no celular e no tablet desde o início, inclusive para sistemas usados em campo.' },
+    { q: 'E depois que entrega?', a: 'O suporte fica combinado na proposta: corrigimos o que aparecer e evoluímos o sistema conforme a empresa cresce.' },
+    { q: 'Meus dados ficam seguros?', a: 'Sim. Cada pessoa vê só o que o cargo dela permite, e essa regra vale no sistema inteiro, não só na tela.' },
   ],
 }
 
 export const finalCta = {
   title: 'Qual tarefa você não quer repetir amanhã?',
-  text: 'Conta pra gente em uma frase. A gente responde com o próximo passo.',
+  text: 'Conta pra gente em uma frase. A gente responde com o próximo passo, sem compromisso.',
+}
+
+export const form = {
+  nome: 'Nome',
+  necessidade: 'O que você quer resolver?',
+  necessidadeAjuda: 'Uma frase basta.',
+  enviarWhatsapp: 'Continuar no WhatsApp',
+  enviarEmail: 'Abrir e-mail',
+  ajudaWhatsapp: 'A mensagem abre pronta no WhatsApp. É só tocar em enviar.',
+  ajudaEmail: 'A mensagem abre pronta no seu e-mail. É só enviar.',
+  vazio: 'Preencha seu nome e o que você quer resolver.',
+  semContato: 'Nosso contato direto ainda está sendo configurado. Volte em breve.',
 }

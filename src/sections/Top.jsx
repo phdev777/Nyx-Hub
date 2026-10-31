@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion, useInView, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { ArrowRight, Check, Menu, X } from 'lucide-react'
 import { demoPanel, hero, nav, stack } from '../content.js'
-import { Button, Logo, Stars, whatsappHref } from '../components/ui.jsx'
+import { Button, Logo, Stars, contactLabel, whatsappHref } from '../components/ui.jsx'
 
 const EASE_OUT = [0.23, 1, 0.32, 1]
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const toggle = useRef(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -17,8 +18,20 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Menu do celular aberto: Esc fecha (e devolve o foco ao botão) e a página atrás não rola.
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => { if (e.key === 'Escape') { setOpen(false); toggle.current?.focus() } }
+    document.addEventListener('keydown', onKey)
+    document.documentElement.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.documentElement.style.overflow = ''
+    }
+  }, [open])
+
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-200 ${scrolled || open ? 'border-b border-alice/10 bg-night/80 backdrop-blur-md' : 'border-b border-transparent'}`}>
+    <header className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-200 ${scrolled || open ? 'border-b border-alice/10 bg-night/80 backdrop-blur-md' : 'border-b border-transparent'}`}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <a href="#topo" className="shrink-0"><Logo /><span className="sr-only">, início</span></a>
         <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">
@@ -27,9 +40,10 @@ export function Header() {
           ))}
         </nav>
         <div className="hidden md:block">
-          <Button href={whatsappHref()} className="min-h-10 px-5 text-sm">Falar com a gente</Button>
+          <Button href={whatsappHref()} className="min-h-10 px-5 text-sm">{contactLabel()}</Button>
         </div>
         <button
+          ref={toggle}
           type="button"
           className="inline-flex h-11 w-11 items-center justify-center rounded-full text-alice md:hidden"
           aria-expanded={open}
@@ -45,16 +59,16 @@ export function Header() {
           <motion.nav
             id="menu-celular"
             aria-label="Principal"
-            className="border-t border-alice/10 px-4 pb-6 md:hidden"
+            className="max-h-[calc(100svh-4rem)] overflow-y-auto overscroll-contain border-t border-alice/10 px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:hidden"
             initial={{ opacity: 0, transform: 'translateY(-8px)' }}
             animate={{ opacity: 1, transform: 'translateY(0px)' }}
-            exit={{ opacity: 0, transform: 'translateY(-8px)' }}
+            exit={{ opacity: 0, transform: 'translateY(-4px)', transition: { duration: 0.12 } }}
             transition={{ duration: 0.2, ease: EASE_OUT }}
           >
             {nav.map((item) => (
               <a key={item.href} href={item.href} onClick={() => setOpen(false)} className="flex min-h-12 items-center border-b border-alice/5 text-base text-alice/80">{item.label}</a>
             ))}
-            <Button href={whatsappHref()} className="mt-5 w-full" onClick={() => setOpen(false)}>Falar com a gente</Button>
+            <Button href={whatsappHref()} className="mt-5 w-full" onClick={() => setOpen(false)}>{contactLabel()}</Button>
           </motion.nav>
         )}
       </AnimatePresence>
@@ -78,13 +92,13 @@ export function Hero() {
             {hero.eyebrow}
           </motion.p>
           <h1 className="mt-6 text-[2.6rem] font-extrabold leading-[1.02] tracking-[-0.045em] sm:text-6xl lg:text-[4.4rem]">
-            {/* Cada linha sobe de trás de uma máscara, uma depois da outra. */}
+            {/* Cada linha sobe de trás de uma máscara. Sem fade: o título conta como conteúdo visível desde o início. */}
             {hero.title.map((line, i) => (
-              <span key={line} className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
+              <span key={line} className="-my-[0.12em] block overflow-hidden py-[0.12em]">
                 <motion.span
                   className={`block ${i === hero.title.length - 1 ? 'text-nyx-light' : ''}`}
-                  initial={{ opacity: 0, transform: 'translateY(105%)' }}
-                  animate={{ opacity: 1, transform: 'translateY(0%)' }}
+                  initial={{ transform: 'translateY(105%)' }}
+                  animate={{ transform: 'translateY(0%)' }}
                   transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.1 + i * 0.08 }}
                 >
                   {line}
@@ -93,8 +107,8 @@ export function Hero() {
             ))}
           </h1>
           <motion.p
-            className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-alice/65"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.35 }}
+            className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-alice/70"
+            initial={{ opacity: 0.001 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.35 }}
           >
             {hero.text}
           </motion.p>
@@ -129,31 +143,36 @@ function Parallax({ children }) {
 }
 
 // Painel ilustrativo: as linhas vão de "pendente" para "feito", uma por vez, em ciclo.
+// Só anima enquanto está na tela.
 function DemoPanel() {
+  const ref = useRef(null)
+  const visible = useInView(ref)
   const [done, setDone] = useState(0)
   const total = demoPanel.rows.length
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setDone(total); return }
+    if (!visible) return
     const id = setInterval(() => setDone((d) => (d >= total + 2 ? 0 : d + 1)), 1100)
     return () => clearInterval(id)
-  }, [total])
+  }, [total, visible])
 
   const finished = Math.min(done, total)
 
   return (
-    <figure className="relative rounded-3xl border border-alice/10 bg-prussian/70 p-5 shadow-[0_40px_120px_-40px_rgb(24_93_241/0.6)] backdrop-blur-sm sm:p-6">
+    <figure ref={ref} className="relative rounded-3xl border border-alice/10 bg-prussian/85 p-5 shadow-[0_40px_120px_-40px_rgb(24_93_241/0.6)] sm:p-6">
       <figcaption className="flex items-center justify-between">
         <span className="text-sm font-semibold">{demoPanel.title}</span>
-        <span className="rounded-full bg-alice/5 px-2.5 py-1 font-mono text-[0.7rem] text-alice/50">demonstração</span>
+        <span className="rounded-full bg-alice/5 px-2.5 py-1 font-mono text-[0.7rem] text-alice/60">demonstração</span>
       </figcaption>
-      <ul className="mt-5 space-y-2.5" aria-label="Exemplo de tarefas automatizadas">
+      <p className="sr-only">Exemplo de painel em que relatórios, pedidos, manutenções e o fechamento do dia são concluídos automaticamente.</p>
+      <ul className="mt-5 space-y-2.5" aria-hidden="true">
         {demoPanel.rows.map((row, i) => {
           const ok = i < finished
           return (
             <li key={row.label} className="flex items-center justify-between gap-3 rounded-2xl border border-alice/5 bg-night/60 px-4 py-3.5">
               <span className="text-sm text-alice/85">{row.label}</span>
-              <span className={`inline-grid shrink-0 overflow-hidden rounded-full text-xs font-medium transition-colors duration-300 ${ok ? 'bg-nyx/20 text-nyx-light' : 'bg-alice/5 text-alice/45'}`}>
+              <span className={`inline-grid shrink-0 overflow-hidden rounded-full text-xs font-medium transition-colors duration-300 ${ok ? 'bg-nyx/20 text-nyx-light' : 'bg-alice/5 text-alice/60'}`}>
                 {/* Troca de estado: o rótulo antigo sai para cima e o novo entra por baixo. */}
                 <AnimatePresence initial={false} mode="popLayout">
                   <motion.span
@@ -164,7 +183,7 @@ function DemoPanel() {
                     exit={{ opacity: 0, transform: 'translateY(-60%)' }}
                     transition={{ duration: 0.25, ease: EASE_OUT }}
                   >
-                    {ok ? <Check size={13} aria-hidden="true" /> : <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-alice/40 motion-reduce:animate-none" aria-hidden="true" />}
+                    {ok ? <Check size={13} /> : <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-alice/40 motion-reduce:animate-none" />}
                     {ok ? row.done : row.pending}
                   </motion.span>
                 </AnimatePresence>
@@ -173,14 +192,15 @@ function DemoPanel() {
           )
         })}
       </ul>
+      {/* A barra desliza dentro do trilho (translate), sem achatar as pontas arredondadas. */}
       <div className="mt-5 h-1 overflow-hidden rounded-full bg-alice/5" aria-hidden="true">
         <div
-          className="h-full origin-left rounded-full bg-gradient-to-r from-nyx to-nyx-light transition-transform duration-500 ease-[var(--ease-out)]"
-          style={{ transform: `scaleX(${finished / total})` }}
+          className="h-full rounded-full bg-gradient-to-r from-nyx to-nyx-light transition-transform duration-500 ease-out"
+          data-bar style={{ transform: `translateX(${(finished / total - 1) * 100}%)` }}
         />
       </div>
-      <div className="mt-4 flex items-center justify-between gap-3">
-        <span className="text-xs text-alice/50">{demoPanel.footer}</span>
+      <div className="mt-4 flex items-center justify-between gap-3" aria-hidden="true">
+        <span className="text-xs text-alice/60">{demoPanel.footer}</span>
         <span className="font-mono text-sm font-semibold tabular-nums text-alice">{finished}/{total}</span>
       </div>
     </figure>
@@ -193,15 +213,16 @@ export function StackStrip() {
   return (
     <section aria-label="Tecnologias e integrações" className="border-y border-alice/10 bg-prussian/30">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <p className="hidden shrink-0 py-5 text-xs uppercase tracking-[0.16em] text-alice/40 sm:block">Trabalhamos com</p>
+        <p className="hidden shrink-0 py-5 text-xs uppercase tracking-[0.16em] text-alice/60 sm:block">Trabalhamos com</p>
         <div className="marquee relative flex-1 overflow-hidden py-5 [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]" data-paused={paused}>
-          <ul className="marquee-track flex w-max gap-10">
+          {/* Espaço em cada item (não gap na lista): assim -50% cai exatamente no começo da segunda cópia. */}
+          <ul className="marquee-track flex w-max">
             {items.map((item, i) => (
-              <li key={`${item}-${i}`} aria-hidden={i >= stack.length} className="whitespace-nowrap text-sm font-medium text-alice/55">{item}</li>
+              <li key={`${item}-${i}`} aria-hidden={i >= stack.length} className="whitespace-nowrap pr-10 text-sm font-medium text-alice/60">{item}</li>
             ))}
           </ul>
         </div>
-        <button type="button" onClick={() => setPaused((p) => !p)} className="shrink-0 rounded-full px-3 py-2 text-xs text-alice/45 hover:text-alice/80">
+        <button type="button" onClick={() => setPaused((p) => !p)} className="inline-flex min-h-11 shrink-0 items-center rounded-full px-3 text-xs text-alice/60 hover:text-alice/90">
           {paused ? 'Continuar' : 'Pausar'}<span className="sr-only"> faixa de tecnologias</span>
         </button>
       </div>
