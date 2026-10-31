@@ -122,11 +122,12 @@ export const process = {
   index: '05',
   label: 'Como funciona',
   title: 'Quatro passos, sem enrolação.',
+  text: 'Você acompanha cada etapa, da primeira conversa até o sistema rodando na sua empresa.',
   steps: [
-    { title: 'Conversa', text: 'Você conta o problema. A gente entende como a operação funciona hoje.' },
-    { title: 'Proposta fechada', text: 'O que vai ser feito, o prazo e o preço, tudo por escrito antes de começar.' },
-    { title: 'Construção', text: 'Você vê e testa o sistema enquanto ele é feito, não só no final.' },
-    { title: 'Entrega e suporte', text: 'Colocamos no ar, treinamos a equipe e o suporte fica combinado na proposta.' },
+    { title: 'Conversa', text: 'Você conta o problema. A gente entende como a operação funciona hoje.', tag: 'Sem compromisso' },
+    { title: 'Proposta fechada', text: 'O que vai ser feito, o prazo e o preço, tudo por escrito antes de começar.', tag: 'Tudo por escrito' },
+    { title: 'Construção', text: 'Você vê e testa o sistema enquanto ele é feito, não só no final.', tag: 'Você testa junto' },
+    { title: 'Entrega e suporte', text: 'Colocamos no ar, treinamos a equipe e o suporte fica combinado na proposta.', tag: 'Suporte combinado' },
   ],
 }
 

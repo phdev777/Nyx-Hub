@@ -1,6 +1,6 @@
 import { useId, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { Building2, Check, Factory, Globe, Plus, X } from 'lucide-react'
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { Building2, Check, Factory, FileCheck2, Globe, Hammer, MessagesSquare, Plus, Rocket, X } from 'lucide-react'
 import { faq, fit, problem, process, projects, services } from '../content.js'
 import { Reveal, Section, SectionHead, trackPointer } from '../components/ui.jsx'
 
@@ -108,32 +108,58 @@ export function Projects() {
   )
 }
 
+const PASSO_ICONE = [MessagesSquare, FileCheck2, Hammer, Rocket]
+
+// Linha do tempo: a linha enche conforme a seção passa pela tela e cada passo acende quando a linha chega nele.
+// No computador a linha é horizontal, passando pelo centro dos ícones; no celular, trechos verticais ligam um passo ao outro.
 export function Process() {
-  // Barra no topo da lista que enche conforme a seção passa pela tela (mostra o caminho de 1 a 4).
   const ref = useRef(null)
   const reduce = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 60%'] })
-  const fill = useTransform(scrollYProgress, (v) => `scaleX(${v})`)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 80%', 'end 55%'] })
+  const fillX = useTransform(scrollYProgress, (v) => `translateX(${(v - 1) * 100}%)`)
+  const total = process.steps.length
+  const [reached, setReached] = useState(0)
+  useMotionValueEvent(scrollYProgress, 'change', (v) => setReached(Math.floor(v * (total - 1) + 0.02) + 1))
+  const lit = reduce ? total : reached
+
   return (
     <Section id="como-funciona">
       <SectionHead {...process} />
-      <div ref={ref} className="relative mt-12">
-        <div className="absolute inset-x-6 top-0 z-10 h-0.5 overflow-hidden rounded-full bg-alice/5" aria-hidden="true">
-          <motion.div className="h-full origin-left bg-gradient-to-r from-nyx to-nyx-light" data-bar style={{ transform: reduce ? 'scaleX(1)' : fill }} />
+      <ol ref={ref} className="relative mt-12 grid gap-4 md:grid-cols-4 md:gap-6">
+        {/* Trilho do computador: enche junto com a rolagem. */}
+        <div className="absolute inset-x-[calc((100%-4.5rem)/8)] top-6 hidden h-0.5 overflow-hidden rounded-full bg-alice/10 md:block" aria-hidden="true">
+          <motion.div data-bar className="h-full w-full bg-gradient-to-r from-nyx to-nyx-light" style={{ transform: reduce ? 'translateX(0%)' : fillX }} />
         </div>
-      <ol className="grid gap-px overflow-hidden rounded-3xl border border-alice/10 bg-alice/10 md:grid-cols-4">
-        {process.steps.map((s, i) => (
-          // O fundo fica no li (sempre opaco); só o conteúdo entra. Assim a grade não pisca cinza.
-          <li key={s.title} className="bg-night">
-          <Reveal delay={i * 0.06} className="p-6 sm:p-7">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-nyx text-sm font-bold">{i + 1}</span>
-            <h3 className="mt-6 text-lg font-semibold">{s.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-alice/60">{s.text}</p>
-          </Reveal>
-          </li>
-        ))}
+
+        {process.steps.map((s, i) => {
+          const Icone = PASSO_ICONE[i]
+          const on = i < lit
+          return (
+            <li key={s.title} className="relative flex gap-4 md:flex-col md:items-center md:gap-0">
+              {/* No celular, um trecho de linha liga este passo ao próximo e acende quando o próximo é alcançado. */}
+              {i < total - 1 && (
+                <span className="absolute -bottom-4 left-6 top-12 w-0.5 -translate-x-1/2 overflow-hidden bg-alice/10 md:hidden" aria-hidden="true">
+                  <span className={`block h-full w-full bg-gradient-to-b from-nyx to-nyx-light transition-transform duration-500 ease-out ${i + 1 < lit ? 'translate-y-0' : '-translate-y-full'}`} />
+                </span>
+              )}
+              <span
+                className={`relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-2xl border transition-[background-color,border-color,color,box-shadow] duration-300 ease-out ${on ? 'border-nyx bg-nyx text-alice shadow-[0_0_32px_-6px_rgb(24_93_241/0.9)]' : 'border-alice/10 bg-night text-alice/50'}`}
+                aria-hidden="true"
+              >
+                <Icone size={20} />
+              </span>
+              <Reveal delay={i * 0.06} className="flex-1 rounded-3xl border border-alice/10 bg-night/70 p-5 md:mt-6 md:w-full md:p-6">
+                <p className="font-mono text-xs text-nyx-light">Passo {i + 1} de {total}</p>
+                <h3 className="mt-2 text-lg font-semibold">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-alice/65">{s.text}</p>
+                <span className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-alice/10 px-3 py-1 text-xs text-alice/75">
+                  <Check size={12} className="text-nyx-light" aria-hidden="true" />{s.tag}
+                </span>
+              </Reveal>
+            </li>
+          )
+        })}
       </ol>
-      </div>
     </Section>
   )
 }
