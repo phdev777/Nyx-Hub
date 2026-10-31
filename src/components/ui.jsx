@@ -3,13 +3,9 @@ import { contato } from '../content.js'
 
 const EASE_OUT = [0.23, 1, 0.32, 1]
 
-export function Logo({ className = '' }) {
-  return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoMark className="h-7 w-7" />
-      <span className="text-[1.35rem] font-extrabold tracking-[-0.04em] leading-none">Nyx Hub</span>
-    </span>
-  )
+// Logo oficial recortada de brand/logo-banner.png (fundo transparente). Trocar por SVG quando houver o arquivo original.
+export function Logo({ className = 'h-10' }) {
+  return <img src="/logo-nyx-sm.png" alt="Nyx Hub" width="397" height="120" className={`w-auto ${className}`} />
 }
 
 // Lua crescente com a estrela de quatro pontas da marca.

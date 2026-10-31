@@ -59,7 +59,7 @@ export function Footer() {
     <footer className="border-t border-alice/10 px-4 py-10 sm:px-6">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Logo />
+          <Logo className="h-11" />
           <p className="mt-3 text-sm text-alice/45">Software sob demanda.</p>
         </div>
         <nav aria-label="Rodapé" className="flex flex-wrap gap-x-6 gap-y-3">

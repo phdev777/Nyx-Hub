@@ -20,7 +20,7 @@ export function Header() {
   return (
     <header className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-200 ${scrolled || open ? 'border-b border-alice/10 bg-night/80 backdrop-blur-md' : 'border-b border-transparent'}`}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="#topo" aria-label="Nyx Hub, início"><Logo /></a>
+        <a href="#topo" className="shrink-0"><Logo /><span className="sr-only">, início</span></a>
         <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">
           {nav.map((item) => (
             <a key={item.href} href={item.href} className="text-sm text-alice/70 transition-colors duration-150 hover:text-alice">{item.label}</a>
