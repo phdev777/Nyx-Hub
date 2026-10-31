@@ -75,8 +75,9 @@ export function Showcase() {
 
         <div id={`${base}-panel`} tabIndex={0} role="tabpanel" aria-labelledby={`${base}-tab-${active}`} className="@container mt-4 overflow-hidden lg:mt-0 rounded-3xl border border-alice/10 bg-prussian/50 shadow-[0_40px_120px_-50px_rgb(24_93_241/0.55)]">
           <div className="flex items-center justify-between gap-3 border-b border-alice/10 px-4 py-3 sm:px-5">
-            <div className="flex items-center gap-1.5" aria-hidden="true">
-              <span className="h-2.5 w-2.5 rounded-full bg-alice/15" /><span className="h-2.5 w-2.5 rounded-full bg-alice/15" /><span className="h-2.5 w-2.5 rounded-full bg-alice/15" />
+            {/* Os três botões de janela do Mac: vermelho, amarelo e verde. */}
+            <div className="flex shrink-0 items-center gap-2" aria-hidden="true">
+              <span className="h-3 w-3 rounded-full bg-[#ff5f57] ring-1 ring-inset ring-black/20" /><span className="h-3 w-3 rounded-full bg-[#febc2e] ring-1 ring-inset ring-black/20" /><span className="h-3 w-3 rounded-full bg-[#28c840] ring-1 ring-inset ring-black/20" />
             </div>
             <p className="min-w-0 truncate text-xs text-alice/60" title={`Exemplo: ${tab.from}`}><span className="hidden sm:inline">Exemplo: </span><span className="text-alice/80">{tab.from}</span></p>
             <span className="shrink-0 rounded-full bg-amber-400/10 px-2.5 py-1 text-[0.7rem] font-medium text-amber-300">Dados fictícios</span>

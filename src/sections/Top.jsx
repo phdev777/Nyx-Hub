@@ -162,7 +162,12 @@ function DemoPanel() {
   return (
     <figure ref={ref} className="relative rounded-3xl border border-alice/10 bg-prussian/85 p-5 shadow-[0_40px_120px_-40px_rgb(24_93_241/0.6)] sm:p-6">
       <figcaption className="flex items-center justify-between">
-        <span className="text-sm font-semibold">{demoPanel.title}</span>
+        <span className="flex items-center gap-3">
+          <span className="flex shrink-0 items-center gap-2" aria-hidden="true">
+            <span className="h-3 w-3 rounded-full bg-[#ff5f57] ring-1 ring-inset ring-black/20" /><span className="h-3 w-3 rounded-full bg-[#febc2e] ring-1 ring-inset ring-black/20" /><span className="h-3 w-3 rounded-full bg-[#28c840] ring-1 ring-inset ring-black/20" />
+          </span>
+          <span className="text-sm font-semibold">{demoPanel.title}</span>
+        </span>
         <span className="rounded-full bg-alice/5 px-2.5 py-1 font-mono text-[0.7rem] text-alice/60">demonstração</span>
       </figcaption>
       <p className="sr-only">Exemplo de painel em que relatórios, pedidos, manutenções e o fechamento do dia são concluídos automaticamente.</p>
