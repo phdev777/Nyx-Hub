@@ -116,7 +116,6 @@ export const showcase = {
   index: '04',
   label: 'Por dentro',
   title: 'Veja como fica por dentro.',
-  text: 'Telas de exemplo, com nomes e números fictícios: produção, manutenção, central de operações, diárias e até uma usina em 3D.',
 }
 
 export const process = {
