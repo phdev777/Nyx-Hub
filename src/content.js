@@ -141,10 +141,12 @@ export const fit = {
     'Você quer falar direto com quem constrói.',
     'Precisa de algo que funcione no celular ou no tablet.',
   ],
-  no: [
-    'Você procura o preço mais baixo, sem olhar a qualidade.',
-    'Precisa de uma solução pronta, sem ajustar nada ao seu processo.',
-    'Quer só um orçamento para comparar, sem intenção de fazer.',
+  // Decidido em 31/10: sem a lista de "não é pra você" (soou agressiva); no lugar, o que a pessoa pode esperar.
+  espera: [
+    'Preço e prazo combinados por escrito antes de começar.',
+    'Um sistema que segue o seu processo, e não o contrário.',
+    'Você acompanha e testa cada etapa.',
+    'Suporte combinado depois da entrega.',
   ],
 }
 

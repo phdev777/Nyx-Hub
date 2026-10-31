@@ -1,6 +1,6 @@
 import { useId, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { Building2, Check, Factory, FileCheck2, Globe, Hammer, MessageCircle, MessagesSquare, Plus, Rocket, X } from 'lucide-react'
+import { Building2, Check, Factory, FileCheck2, Globe, Hammer, MessageCircle, MessagesSquare, Plus, Rocket, Sparkles } from 'lucide-react'
 import { faq, fit, problem, process, projects, services } from '../content.js'
 import { Button, Reveal, Section, SectionHead, contactLabel, trackPointer, whatsappHref } from '../components/ui.jsx'
 
@@ -178,10 +178,10 @@ export function Fit() {
           </ul>
         </Reveal>
         <Reveal delay={0.06} className="rounded-3xl border border-alice/10 bg-prussian/30 p-6 sm:p-8">
-          <h3 className="font-semibold text-alice/80">Provavelmente não é pra você</h3>
+          <h3 className="font-semibold">O que você pode esperar</h3>
           <ul className="mt-5 space-y-3.5">
-            {fit.no.map((t) => (
-              <li key={t} className="flex gap-3 text-sm leading-relaxed text-alice/65"><X size={18} className="mt-0.5 shrink-0 text-alice/45" aria-hidden="true" />{t}</li>
+            {fit.espera.map((t) => (
+              <li key={t} className="flex gap-3 text-sm leading-relaxed text-alice/80"><Sparkles size={18} className="mt-0.5 shrink-0 text-nyx-light" aria-hidden="true" />{t}</li>
             ))}
           </ul>
         </Reveal>
