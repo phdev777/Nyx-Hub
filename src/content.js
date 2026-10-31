@@ -35,10 +35,8 @@ export const demoPanel = {
   footer: 'Tudo num painel só, em vez de planilha e WhatsApp.',
 }
 
-export const stack = [
-  'React', 'Supabase', 'PostgreSQL', 'WhatsApp', 'Google Sheets', 'Excel', 'PDF',
-  'Power BI', 'APIs de ERP', 'Vercel', 'Cloudflare', 'Automação com IA', 'Tablets em campo',
-]
+// Faixa abaixo do hero: o que fazemos, em linguagem simples (decidido em 31/10).
+export const stack = ['Automações', 'Integração com ERP', 'Agentes de IA']
 
 export const problem = {
   index: '01',
@@ -55,13 +53,13 @@ export const problem = {
 export const services = {
   index: '02',
   label: 'O que entregamos',
-  title: 'Do site ao sistema completo.',
+  title: 'Do site ao agente de IA.',
   text: 'Cada entrega tem escopo e prazo combinados antes de começar. Os prazos abaixo são referência e são fechados na proposta.',
   items: [
     { name: 'Site profissional', text: 'Site rápido e bonito para apresentar sua empresa e trazer contatos.', tag: '1 a 2 semanas' },
     { name: 'Automação', text: 'Rotinas repetitivas rodando sozinhas: relatórios, avisos, integrações entre sistemas.', tag: '2 a 4 semanas' },
-    { name: 'Sistema interno', text: 'Painéis e cadastros para a equipe registrar e acompanhar a operação, inclusive em tablet.', tag: '4 a 8 semanas' },
-    { name: 'Software sob medida', text: 'Produto completo, com login, permissões por cargo, relatórios e suporte.', tag: 'Sob proposta' },
+    { name: 'Sistema interno', text: 'Painéis, cadastros e relatórios para a equipe acompanhar a operação, com acesso por cargo.', tag: '4 a 8 semanas' },
+    { name: 'Agente de IA', text: 'Um assistente que atende, organiza pedidos e faz as tarefas repetitivas da equipe.', tag: 'Sob proposta' },
   ],
 }
 
@@ -158,7 +156,7 @@ export const faq = {
 }
 
 export const finalCta = {
-  title: 'Qual tarefa você não quer repetir amanhã?',
+  title: 'O que mais toma tempo da sua equipe hoje?',
   text: 'Conta pra gente em uma frase. A gente responde com o próximo passo, sem compromisso.',
 }
 

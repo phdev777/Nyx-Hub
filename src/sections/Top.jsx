@@ -209,11 +209,13 @@ function DemoPanel() {
 
 export function StackStrip() {
   const [paused, setPaused] = useState(false)
-  const items = [...stack, ...stack]
+  // Poucos itens: repete o bastante para a faixa nunca ficar vazia em tela larga. Duas metades iguais para o -50% fechar o ciclo.
+  const half = Array.from({ length: 4 }, () => stack).flat()
+  const items = [...half, ...half]
   return (
-    <section aria-label="Tecnologias e integrações" className="border-y border-alice/10 bg-prussian/30">
+    <section aria-label="O que fazemos" className="border-y border-alice/10 bg-prussian/30">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <p className="hidden shrink-0 py-5 text-xs uppercase tracking-[0.16em] text-alice/60 sm:block">Trabalhamos com</p>
+        <p className="hidden shrink-0 py-5 text-xs uppercase tracking-[0.16em] text-alice/60 sm:block">Pra sua empresa</p>
         <div className="marquee relative flex-1 overflow-hidden py-5 [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]" data-paused={paused}>
           {/* Espaço em cada item (não gap na lista): assim -50% cai exatamente no começo da segunda cópia. */}
           <ul className="marquee-track flex w-max">
@@ -223,7 +225,7 @@ export function StackStrip() {
           </ul>
         </div>
         <button type="button" onClick={() => setPaused((p) => !p)} className="inline-flex min-h-11 shrink-0 items-center rounded-full px-3 text-xs text-alice/60 hover:text-alice/90">
-          {paused ? 'Continuar' : 'Pausar'}<span className="sr-only"> faixa de tecnologias</span>
+          {paused ? 'Continuar' : 'Pausar'}<span className="sr-only"> faixa</span>
         </button>
       </div>
     </section>
