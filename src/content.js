@@ -2,7 +2,7 @@
 
 export const contato = {
   // Número com DDI e DDD, só dígitos (ex.: '5563999999999'). Vazio = botões levam ao formulário.
-  whatsapp: '', // A CONFIRMAR
+  whatsapp: '5563992949775', // (63) 99294-9775, informado pelo Pedro em 31/10
   email: '', // A CONFIRMAR (ex.: contato@nyxhub.com.br)
   instagram: '', // A CONFIRMAR
 }
