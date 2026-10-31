@@ -56,11 +56,11 @@ export function Showcase() {
                 aria-controls={`${base}-panel`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => choose(t.id)}
-                className={`relative inline-flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full px-4 text-left text-sm font-medium transition-[color,transform] duration-150 ease-out active:scale-[0.97] lg:w-full lg:items-start lg:gap-3 lg:rounded-2xl lg:p-3 lg:active:scale-[0.99] ${selected ? 'text-alice' : 'text-alice/65 hover:text-alice/90'}`}
+                className={`relative inline-flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full px-4 text-left text-sm font-medium transition-[color,transform] duration-150 ease-out active:scale-[0.97] lg:w-full lg:items-start lg:gap-3 lg:rounded-2xl lg:p-3 lg:active:scale-[0.99] ${selected ? 'text-snow lg:text-alice' : 'text-alice/65 hover:text-alice/90'}`}
               >
                 {/* O destaque desliza até a aba escolhida: pílula azul no celular, cartão com borda no computador. */}
                 {selected && <motion.span layoutId="showcase-pill" className="absolute inset-0 rounded-full bg-nyx lg:rounded-2xl lg:bg-nyx/15 lg:ring-1 lg:ring-nyx/50" transition={{ type: 'spring', duration: 0.35, bounce: 0 }} />}
-                <span className={`relative lg:grid lg:h-9 lg:w-9 lg:shrink-0 lg:place-items-center lg:rounded-xl lg:border ${selected ? 'lg:border-nyx/40 lg:bg-nyx lg:text-alice' : 'lg:border-alice/10 lg:bg-night/60 lg:text-nyx-light'}`}>
+                <span className={`relative lg:grid lg:h-9 lg:w-9 lg:shrink-0 lg:place-items-center lg:rounded-xl lg:border ${selected ? 'lg:border-nyx/40 lg:bg-nyx lg:text-snow' : 'lg:border-alice/10 lg:bg-night/60 lg:text-nyx-light'}`}>
                   <t.icon size={16} aria-hidden="true" />
                 </span>
                 <span className="relative">
@@ -311,11 +311,11 @@ function CentralScreen() {
       <Card title="Quem pode o quê">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead><tr><th className="sticky left-0 bg-[#020812] pb-2 font-normal"><span className="sr-only">Permissão</span></th>{PERFIS.map(([nome, curto]) => <th key={nome} scope="col" className="px-1 pb-2 text-center font-medium text-alice/70"><abbr title={nome} className="no-underline sm:hidden">{curto}</abbr><span className="hidden sm:inline">{nome}</span></th>)}</tr></thead>
+            <thead><tr><th className="sticky left-0 bg-night pb-2 font-normal"><span className="sr-only">Permissão</span></th>{PERFIS.map(([nome, curto]) => <th key={nome} scope="col" className="px-1 pb-2 text-center font-medium text-alice/70"><abbr title={nome} className="no-underline sm:hidden">{curto}</abbr><span className="hidden sm:inline">{nome}</span></th>)}</tr></thead>
             <tbody>
               {PERMISSOES.map(([nome, flags]) => (
                 <tr key={nome} className="border-t border-alice/5">
-                  <th scope="row" className="sticky left-0 bg-[#020812] py-2.5 pr-2 font-normal text-alice/80">{nome}</th>
+                  <th scope="row" className="sticky left-0 bg-night py-2.5 pr-2 font-normal text-alice/80">{nome}</th>
                   {flags.map((f, i) => (
                     <td key={i} className="text-center">{f ? <Check size={15} className="mx-auto text-nyx-light" aria-hidden="true" /> : <span className="text-alice/30" aria-hidden="true">—</span>}<span className="sr-only">{f ? 'sim' : 'não'}</span></td>
                   ))}
@@ -371,12 +371,12 @@ function AreaChart({ serie }) {
     <svg viewBox="0 0 100 40" preserveAspectRatio="none" className="h-24 w-full" aria-hidden="true">
       <defs>
         <linearGradient id="vazao-area" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="#6e9bff" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#6e9bff" stopOpacity="0" />
+          <stop offset="0%" stopColor="var(--color-nyx-light)" stopOpacity="0.45" />
+          <stop offset="100%" stopColor="var(--color-nyx-light)" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path d={`${linha} L100,40 L0,40 Z`} fill="url(#vazao-area)" />
-      <path d={linha} fill="none" stroke="#6e9bff" strokeWidth="1.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+      <path d={linha} fill="none" stroke="var(--color-nyx-light)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
     </svg>
   )
 }
@@ -418,7 +418,7 @@ function PlantPanelScreen() {
             <div className="flex rounded-full bg-night p-1" role="group" aria-label="Área da planta">
               {AREAS.map((a) => (
                 <button key={a.id} type="button" aria-pressed={area === a.id} onClick={() => escolherArea(a.id)}
-                  className={`min-h-8 rounded-full px-3 text-xs font-medium transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97] ${area === a.id ? 'bg-nyx text-alice' : 'text-alice/65 hover:text-alice/90'}`}>
+                  className={`min-h-8 rounded-full px-3 text-xs font-medium transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97] ${area === a.id ? 'bg-nyx text-snow' : 'text-alice/65 hover:text-alice/90'}`}>
                   {a.nome}
                 </button>
               ))}
@@ -505,7 +505,7 @@ function ShiftScreen() {
         <Card title="Diárias do dia">
           <div className="flex items-center gap-4">
             <svg viewBox="0 0 80 80" className="h-24 w-24 -rotate-90" role="img" aria-label={`${feitos} de ${total} diárias enviadas`}>
-              <circle cx="40" cy="40" r="34" fill="none" stroke="rgb(243 247 254 / 0.08)" strokeWidth="8" />
+              <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-alice)" strokeOpacity="0.08" strokeWidth="8" />
               <motion.circle cx="40" cy="40" r="34" fill="none" stroke="url(#nyx-ring)" strokeWidth="8" strokeLinecap="round" strokeDasharray={C}
                 initial={{ strokeDashoffset: C }} whileInView={{ strokeDashoffset: C * (1 - feitos / total) }} viewport={{ once: true }} transition={{ duration: 1, ease: EASE_OUT }} />
               <defs><linearGradient id="nyx-ring"><stop offset="0" stopColor="#185df1" /><stop offset="1" stopColor="#6e9bff" /></linearGradient></defs>
@@ -539,8 +539,8 @@ function PlantScreen() {
           <div className="absolute inset-0 bg-gradient-to-t from-night via-night/50 to-transparent to-60%" aria-hidden="true" />
           <p className="relative max-w-sm text-sm font-medium text-alice/90">Uma usina inteira em 3D. Dá para girar, aproximar e clicar em cada máquina.</p>
           {/* No celular, a cena dentro da página prende o dedo e atrapalha a rolagem: abre em outra aba, em tela cheia. */}
-          <a href={PLANTA} target="_blank" rel="noreferrer" className="relative inline-flex min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] sm:hidden">Abrir planta 3D<span className="sr-only"> em outra aba</span></a>
-          <button type="button" onClick={() => setLoad(true)} className="relative hidden min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold shadow-[0_10px_40px_-10px_rgb(24_93_241/0.8)] transition-[background-color,transform] duration-150 ease-out hover:bg-[#1450d6] active:scale-[0.97] sm:inline-flex">Abrir planta 3D</button>
+          <a href={PLANTA} target="_blank" rel="noreferrer" className="relative inline-flex min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold text-snow transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] sm:hidden">Abrir planta 3D<span className="sr-only"> em outra aba</span></a>
+          <button type="button" onClick={() => setLoad(true)} className="relative hidden min-h-11 items-center rounded-full bg-nyx px-5 text-sm font-semibold text-snow shadow-[0_10px_40px_-10px_rgb(24_93_241/0.8)] transition-[background-color,transform] duration-150 ease-out hover:bg-[#1450d6] active:scale-[0.97] sm:inline-flex">Abrir planta 3D</button>
         </div>
       )}
     </div>

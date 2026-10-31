@@ -9,9 +9,37 @@
   --color-nyx: #185df1;        /* Nyx Blue — destaque e botões */
   --color-nyx-light: #6e9bff;  /* Nyx Blue clareado, para texto pequeno sobre fundo escuro */
   --color-alice: #f3f7fe;      /* Alice Blue — texto principal */
+  --color-snow: #f3f7fe;       /* texto claro fixo: sobre o azul e sobre fotos, nos dois temas */
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
+
+/* Modo claro: as mesmas cores trocam de papel (fundo vira claro, texto vira azul-marinho).
+   Como todas as classes usam essas variáveis, o site inteiro acompanha. */
+:root { color-scheme: dark; }
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-night: #fbfcff;
+  --color-prussian: #e3eaf7;
+  --color-alice: #0a1633;
+  --color-nyx-light: #1f56d6;
+}
+/* Verde, vermelho e amarelo claros somem no fundo branco: no modo claro ficam mais escuros. */
+:root[data-theme="light"] .text-emerald-300 { color: #047857; }
+:root[data-theme="light"] .text-rose-300 { color: #be123c; }
+:root[data-theme="light"] .text-amber-300,
+:root[data-theme="light"] .text-amber-200 { color: #a16207; }
+:root[data-theme="light"] .ring-emerald-300 { --tw-ring-color: #059669; }
+:root[data-theme="light"] .ring-rose-300 { --tw-ring-color: #e11d48; }
+:root[data-theme="light"] .ring-amber-300 { --tw-ring-color: #d97706; }
+/* A logo é branca: no modo claro vira azul-marinho. */
+:root[data-theme="light"] .logo-img { filter: brightness(0.14) sepia(1) hue-rotate(190deg) saturate(3); }
+/* Estrelas não aparecem no céu claro. */
+:root[data-theme="light"] .star { display: none; }
+
+/* Troca de tema: a página inteira faz um fade curto, em vez de piscar. */
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 0.25s; }
 
 @layer base {
   html {
@@ -53,12 +81,12 @@
 .glow-bottom {
   background:
     radial-gradient(60% 55% at 50% 100%, rgb(24 93 241 / 0.55), transparent 70%),
-    radial-gradient(90% 70% at 50% 110%, rgb(3 17 48 / 0.9), transparent 75%);
+    radial-gradient(90% 70% at 50% 110%, color-mix(in srgb, var(--color-prussian) 90%, transparent), transparent 75%);
 }
 .grid-lines {
   background-image:
-    linear-gradient(to right, rgb(243 247 254 / 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(243 247 254 / 0.04) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in srgb, var(--color-alice) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-alice) 5%, transparent) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(70% 60% at 50% 40%, #000 30%, transparent 80%);
 }

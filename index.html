@@ -4,7 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#01040D" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
+    <!-- Tema escolhido pela pessoa (claro ou escuro), aplicado antes de pintar a página. Padrão: escuro. -->
+    <script>
+      try {
+        if (localStorage.getItem('nyx-tema') === 'light') {
+          document.documentElement.dataset.theme = 'light'
+          document.querySelector('meta[name=theme-color]').content = '#FBFCFF'
+        }
+      } catch (e) {}
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Nyx Hub — Software sob demanda</title>
     <meta name="description" content="A Nyx Hub cria sistemas, automações e sites sob medida para empresas que cansaram de planilha, retrabalho e ferramenta que não conversa com a operação." />

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useInView, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { ArrowRight, Check, Menu, X } from 'lucide-react'
 import { demoPanel, hero, nav, stack } from '../content.js'
-import { Button, Logo, Stars, contactLabel, whatsappHref } from '../components/ui.jsx'
+import { Button, Logo, Stars, ThemeToggle, contactLabel, whatsappHref } from '../components/ui.jsx'
 
 const EASE_OUT = [0.23, 1, 0.32, 1]
 
@@ -39,9 +39,12 @@ export function Header() {
             <a key={item.href} href={item.href} className="text-sm text-alice/70 transition-colors duration-150 hover:text-alice">{item.label}</a>
           ))}
         </nav>
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           <Button href={whatsappHref()} className="min-h-10 px-5 text-sm">{contactLabel()}</Button>
         </div>
+        <div className="flex items-center gap-1 md:hidden">
+        <ThemeToggle />
         <button
           ref={toggle}
           type="button"
@@ -53,6 +56,7 @@ export function Header() {
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
+        </div>
       </div>
       <AnimatePresence>
         {open && (

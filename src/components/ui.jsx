@@ -1,11 +1,13 @@
+import { useState } from 'react'
 import { motion } from 'motion/react'
+import { Moon, Sun } from 'lucide-react'
 import { contato } from '../content.js'
 
 const EASE_OUT = [0.23, 1, 0.32, 1]
 
 // Logo oficial recortada de brand/logo-banner.png (fundo transparente). Trocar por SVG quando houver o arquivo original.
 export function Logo({ className = 'h-10' }) {
-  return <img src="/logo-nyx-sm.png" alt="Nyx Hub" width="397" height="120" className={`w-auto ${className}`} />
+  return <img src="/logo-nyx-sm.png" alt="Nyx Hub" width="397" height="120" className={`logo-img w-auto ${className}`} />
 }
 
 // Lua crescente com a estrela de quatro pontas da marca.
@@ -19,6 +21,37 @@ export function LogoMark({ className = '' }) {
       <circle cx="30" cy="32" r="24" fill="currentColor" mask="url(#nyx-moon)" />
       <path d="M44 22.5l2 7.5 7.5 2-7.5 2-2 7.5-2-7.5-7.5-2 7.5-2z" fill="currentColor" />
     </svg>
+  )
+}
+
+// Botão de tema (sol / lua). Guarda a escolha no navegador; o padrão é o escuro da marca.
+export function ThemeToggle({ className = '' }) {
+  const [light, setLight] = useState(() => document.documentElement.dataset.theme === 'light')
+
+  function trocar() {
+    const next = !light
+    const aplicar = () => {
+      if (next) document.documentElement.dataset.theme = 'light'
+      else delete document.documentElement.dataset.theme
+      document.querySelector('meta[name=theme-color]')?.setAttribute('content', next ? '#FBFCFF' : '#01040D')
+      setLight(next)
+    }
+    try { localStorage.setItem('nyx-tema', next ? 'light' : 'dark') } catch { /* navegador sem armazenamento: vale só nesta visita */ }
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (document.startViewTransition && !reduce) document.startViewTransition(aplicar)
+    else aplicar()
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={trocar}
+      aria-label={light ? 'Usar modo escuro' : 'Usar modo claro'}
+      title={light ? 'Modo escuro' : 'Modo claro'}
+      className={`inline-flex h-10 w-10 items-center justify-center rounded-full border border-alice/15 text-alice/80 transition-[background-color,border-color,color,transform] duration-150 ease-out hover:border-alice/35 hover:text-alice active:scale-[0.94] ${className}`}
+    >
+      {light ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
+    </button>
   )
 }
 
@@ -57,7 +90,7 @@ export function contactLabel() {
 export function Button({ href, variant = 'primary', children, className = '', ...rest }) {
   const external = href?.startsWith('http')
   const styles = variant === 'primary'
-    ? 'bg-nyx text-alice shadow-[0_8px_30px_-8px_rgb(24_93_241/0.7)] hover:bg-[#1450d6]'
+    ? 'bg-nyx text-snow shadow-[0_8px_30px_-8px_rgb(24_93_241/0.7)] hover:bg-[#1450d6]'
     : 'border border-alice/15 text-alice hover:border-alice/35 hover:bg-alice/5'
   return (
     <a

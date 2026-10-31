@@ -143,7 +143,7 @@ export function Process() {
                 </span>
               )}
               <span
-                className={`relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-2xl border transition-[background-color,border-color,color,box-shadow] duration-300 ease-out ${on ? 'border-nyx bg-nyx text-alice shadow-[0_0_32px_-6px_rgb(24_93_241/0.9)]' : 'border-alice/10 bg-night text-alice/50'}`}
+                className={`relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-2xl border transition-[background-color,border-color,color,box-shadow] duration-300 ease-out ${on ? 'border-nyx bg-nyx text-snow shadow-[0_0_32px_-6px_rgb(24_93_241/0.9)]' : 'border-alice/10 bg-night text-alice/50'}`}
                 aria-hidden="true"
               >
                 <Icone size={20} />
@@ -216,7 +216,7 @@ export function Faq() {
                     onClick={() => setOpen(isOpen ? -1 : i)}
                   >
                     {item.q}
-                    <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-[background-color,border-color,color] duration-200 ease-out ${isOpen ? 'border-nyx bg-nyx text-alice' : 'border-alice/15 text-alice/70'}`}>
+                    <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-[background-color,border-color,color] duration-200 ease-out ${isOpen ? 'border-nyx bg-nyx text-snow' : 'border-alice/15 text-alice/70'}`}>
                       <Plus size={16} aria-hidden="true" className={`transition-transform duration-200 ease-out ${isOpen ? 'rotate-45' : ''}`} />
                     </span>
                   </button>

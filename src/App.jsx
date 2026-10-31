@@ -8,7 +8,7 @@ export default function App() {
   return (
     // "user": quem pede menos movimento no sistema vê só os fades, sem deslocamento.
     <MotionConfig reducedMotion="user">
-      <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-nyx focus:px-4 focus:py-2">Pular para o conteúdo</a>
+      <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-nyx focus:text-snow focus:px-4 focus:py-2">Pular para o conteúdo</a>
       <Header />
       <main id="conteudo">
         <Hero />

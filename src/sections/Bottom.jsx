@@ -48,7 +48,7 @@ export function Contact() {
             <label className="mt-5 block text-sm font-medium text-alice/80">{copy.necessidade} <span className="font-normal text-alice/60">{copy.necessidadeAjuda}</span>
               <textarea required name="necessidade" rows={3} maxLength={500} autoCapitalize="sentences" enterKeyHint="send" value={form.necessidade} onChange={set('necessidade')} placeholder="Ex.: parar de montar o relatório da equipe à mão" className={`${campo} resize-none`} />
             </label>
-            <button type="submit" className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-nyx px-6 font-semibold text-alice shadow-[0_8px_30px_-8px_rgb(24_93_241/0.7)] transition-[background-color,transform] duration-150 ease-out hover:bg-[#1450d6] active:scale-[0.97]">
+            <button type="submit" className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-nyx px-6 font-semibold text-snow shadow-[0_8px_30px_-8px_rgb(24_93_241/0.7)] transition-[background-color,transform] duration-150 ease-out hover:bg-[#1450d6] active:scale-[0.97]">
               {canal === 'email' ? copy.enviarEmail : copy.enviarWhatsapp}<ArrowRight size={18} aria-hidden="true" />
             </button>
             <p className={`mt-3 min-h-5 text-center text-xs ${aviso ? 'text-amber-200' : 'text-alice/60'}`} role="status">{aviso || (canal === 'email' ? copy.ajudaEmail : copy.ajudaWhatsapp)}</p>
