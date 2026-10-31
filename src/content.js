@@ -65,7 +65,7 @@ export const services = {
   ],
 }
 
-// A CONFIRMAR: quais projetos podem aparecer e se o cliente pode ser citado pelo nome.
+// Decidido em 31/10: nenhum cliente citado pelo nome.
 export const projects = {
   index: '03',
   label: 'Projetos',
@@ -79,7 +79,6 @@ export const projects = {
       solution: 'Diária digital no tablet da frota, painel de produção, metas, pessoas, permissões por unidade e manutenção preventiva.',
       facts: ['Tablet em campo', 'Painel de produção', 'Manutenção preventiva'],
       status: 'Em uso',
-      // A CONFIRMAR: autorização da empresa e das pessoas que aparecem na foto.
       image: { src: '/projetos/mineradora-tablet-2.jpg', alt: 'Operador registrando a diária no tablet fixado na parede da cabine da usina' },
     },
     {
